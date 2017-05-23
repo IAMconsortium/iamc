@@ -33,6 +33,8 @@
 
 iamCheck <- function(x, pdf=NULL, cfg="IAMC", val="IAMC", verbose=TRUE) {
 
+  if(missing(x)) stop("x needs to be provided!")
+
   #read config file
   cfg <- iamVariables(cfg)
 
@@ -53,23 +55,31 @@ iamCheck <- function(x, pdf=NULL, cfg="IAMC", val="IAMC", verbose=TRUE) {
                 failed=setdiff(x$variable,cfg$variable)))
   }
 
-  checkMin <- function(x, cfg)  {
-    x <- collapseNames(as.magpie(x)[,,cfg$variable], collapsedim = 4)
-    min <- as.magpie(cfg[,c("variable","min")],tidy=TRUE)
-    check <- x>min
+  checkBounds <- function(mx, cfg, type="min")  {
+    messages <- c(min="%# values lie below allowed minimum",
+                  max="%# values lie above allowed maximum")
+
+    ref <- as.magpie(cfg[,c("variable",type)],datacol=2)
+    if(type=="min") {
+      check <- mx>ref
+    } else if(type=="max") {
+      check <- mx<ref
+    } else {
+      stop("Unknown type ",type)
+    }
     check[is.na(check)] <- TRUE
     check <- as.quitte(check)
     failed <- check[!check$value,]
     failed <- paste(failed$variable, failed$model, failed$scenario, failed$region,sep=" | ")
-    return(list(message="%# values lie below allowed minimum",
+    return(list(message=messages[type],
            failed=failed))
   }
 
-  runCheck <- function(func, x, cfg, verbose=TRUE, filter=FALSE) {
+  runCheck <- function(verbose=TRUE, func, ...) {
     funcname <- as.character(as.list(match.call())$func)
-    r <- try(func(x,cfg), silent = TRUE)
+    r <- try(func(...), silent = TRUE)
     if(is(r,"try-error")) {
-      warning(funcname,": Test failed!", call. = FALSE)
+      warning(funcname,": Test failed! ", r, call. = FALSE)
       return(NULL)
     }
     nfailed <- length(r$failed)
@@ -77,12 +87,22 @@ iamCheck <- function(x, pdf=NULL, cfg="IAMC", val="IAMC", verbose=TRUE) {
     if(nfailed>0 & verbose) {
       for(elem in r$failed) message(paste("  ", elem))
     }
-    if(filter) return(as.quitte(droplevels(x[!(x$variable %in% r$failed),])))
-    else return(NULL)
+    out <- list()
+    out[[funcname]] <- r
+    return(out)
   }
 
-  x <- runCheck(checkVariable, x, cfg, verbose, filter=TRUE)
-  runCheck(checkMin, x, cfg, verbose)
+  # check variable names
+  out  <- runCheck(verbose, checkVariable, x=x, cfg=cfg)
+
+  # filter x based on variable check (as only settings for allowed variable names are available)
+  x  <- as.quitte(droplevels(x[!(x$variable %in% out$checkVariable$failed),]))
+
+  # convert x to magclass format as alternative source for checks
+  mx <- collapseNames(as.magpie(x), collapsedim = 4)
+
+  runCheck(verbose, checkBounds, mx=mx, cfg=cfg, type="min")
+  runCheck(verbose, checkBounds, mx=mx, cfg=cfg, type="max")
 
  if(!is.null(pdf)) {
    validationpdf(x=x,hist=iamValidationData(val=val),file = pdf)
