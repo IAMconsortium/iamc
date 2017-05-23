@@ -1,0 +1,18 @@
+Package: iamc
+Type: Package
+Title: IAMC Tools
+Version: 0.2.0
+Authors@R: c(person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de", role = c("aut","cre")))
+Description: A collection of R tools provided by the Integrated Assessment Modeling Consortium (IAMC) for data analysis and diagnostics. 
+License: MIT + file LICENSE
+Depends:
+    R(>= 2.10.0)
+Imports: quitte,
+         magclass,
+         mip,
+         dplyr,
+         utils,
+         methods
+Encoding: UTF-8
+LazyData: false
+RoxygenNote: 6.0.1
