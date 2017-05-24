@@ -19,11 +19,9 @@
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{iamVariables}}, \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
 #' @examples
-#' # load example data
-#' data("example_magpie")
 #'
-#' # run check
-#' iamCheck(example_magpie, pdf=NULL)
+#' # run check with example data
+#' iamCheck(example_magpie)
 #'
 #' @importFrom quitte as.quitte is.quitte
 #' @importFrom magclass as.magpie collapseNames
@@ -48,32 +46,6 @@ iamCheck <- function(x, pdf=NULL, cfg="IAMC", val="IAMC", verbose=TRUE) {
   #reduce config to variables which exist in x
   variables <- intersect(x$variable, cfg$variable)
   cfg <- cfg[cfg$variable %in% variables,]
-
-  #check variable names
-  checkVariable <- function(x, cfg) {
-    return(list(message="data contains %# non-standard variable names",
-                failed=setdiff(x$variable,cfg$variable)))
-  }
-
-  checkBounds <- function(mx, cfg, type="min")  {
-    messages <- c(min="%# values lie below allowed minimum",
-                  max="%# values lie above allowed maximum")
-
-    ref <- as.magpie(cfg[,c("variable",type)],datacol=2)
-    if(type=="min") {
-      check <- mx>ref
-    } else if(type=="max") {
-      check <- mx<ref
-    } else {
-      stop("Unknown type ",type)
-    }
-    check[is.na(check)] <- TRUE
-    check <- as.quitte(check)
-    failed <- check[!check$value,]
-    failed <- paste(failed$variable, failed$model, failed$scenario, failed$region,sep=" | ")
-    return(list(message=messages[type],
-           failed=failed))
-  }
 
   runCheck <- function(verbose=TRUE, func, ...) {
     funcname <- as.character(as.list(match.call())$func)
