@@ -26,7 +26,6 @@
 #' @importFrom quitte as.quitte is.quitte
 #' @importFrom magclass as.magpie collapseNames
 #' @importFrom mip validationpdf
-#' @importFrom methods is
 #' @export
 
 iamCheck <- function(x, pdf=NULL, cfg="IAMC", val="IAMC", verbose=TRUE) {
@@ -47,25 +46,8 @@ iamCheck <- function(x, pdf=NULL, cfg="IAMC", val="IAMC", verbose=TRUE) {
   variables <- intersect(x$variable, cfg$variable)
   cfg <- cfg[cfg$variable %in% variables,]
 
-  runCheck <- function(verbose=TRUE, func, ...) {
-    funcname <- as.character(as.list(match.call())$func)
-    r <- try(func(...), silent = TRUE)
-    if(is(r,"try-error")) {
-      warning(funcname,": Test failed! ", r, call. = FALSE)
-      return(NULL)
-    }
-    nfailed <- length(r$failed)
-    message(funcname,": ",sub("%#",nfailed,r$message,fixed=TRUE))
-    if(nfailed>0 & verbose) {
-      for(elem in r$failed) message(paste("  ", elem))
-    }
-    out <- list()
-    out[[funcname]] <- r
-    return(out)
-  }
-
   # check variable names
-  out  <- runCheck(verbose, checkVariable, x=x, cfg=cfg)
+  out  <- processCheck(checkVariable(x=x, cfg=cfg), verbose)
 
   # filter x based on variable check (as only settings for allowed variable names are available)
   x  <- as.quitte(droplevels(x[!(x$variable %in% out$checkVariable$failed),]))
@@ -73,8 +55,8 @@ iamCheck <- function(x, pdf=NULL, cfg="IAMC", val="IAMC", verbose=TRUE) {
   # convert x to magclass format as alternative source for checks
   mx <- collapseNames(as.magpie(x), collapsedim = 4)
 
-  runCheck(verbose, checkBounds, mx=mx, cfg=cfg, type="min")
-  runCheck(verbose, checkBounds, mx=mx, cfg=cfg, type="max")
+  processCheck(checkBounds(mx=mx, cfg=cfg, type="min"), verbose)
+  processCheck(checkBounds(mx=mx, cfg=cfg, type="max"), verbose)
 
  if(!is.null(pdf)) {
    validationpdf(x=x,hist=iamValidationData(val=val),file = pdf)

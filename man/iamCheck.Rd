@@ -31,11 +31,9 @@ Runs various diagnostics over a provided data set checking whether
 the provided data is in line with IAMC database guidelines.
 }
 \examples{
-# load example data
-data("example_magpie")
 
-# run check
-iamCheck(example_magpie, pdf=NULL)
+# run check with example data
+iamCheck(example_magpie)
 
 }
 \seealso{
