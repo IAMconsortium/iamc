@@ -24,7 +24,7 @@ file or a quitte object containing the data.}
 detailed information whereas \code{verbose=FALSE} returns a summary.}
 }
 \value{
-Number of notes returned by iamCheck
+list of all outputs created by the performed checks
 }
 \description{
 Runs various diagnostics over a provided data set checking whether

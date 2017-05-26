@@ -15,7 +15,7 @@
 #' file or a quitte object containing the data.
 #' @param verbose Boolean influencing the degree of information returned by the function. \code{verbose=TRUE} returns
 #' detailed information whereas \code{verbose=FALSE} returns a summary.
-#' @return Number of notes returned by iamCheck
+#' @return list of all outputs created by the performed checks
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{iamVariables}}, \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
 #' @examples
@@ -42,12 +42,17 @@ iamCheck <- function(x, pdf=NULL, cfg="IAMC", val="IAMC", verbose=TRUE) {
   x <- try(as.quitte(x))
   if(is(x,"try-error")) stop("Incompatible data input format. Data could not be converted to quitte object!")
 
+  #create environment to store settings and outputs
+  e <- new.env()
+  e$verbose <- verbose
+  on.exit(rm(list=ls(envir = e), envir=e))
+
   #reduce config to variables which exist in x
   variables <- intersect(x$variable, cfg$variable)
   cfg <- cfg[cfg$variable %in% variables,]
 
   # check variable names
-  out  <- processCheck(checkVariable(x=x, cfg=cfg), verbose)
+  out  <- processCheck(checkVariable(x=x, cfg=cfg), e)
 
   # filter x based on variable check (as only settings for allowed variable names are available)
   x  <- as.quitte(droplevels(x[!(x$variable %in% out$checkVariable$failed),]))
@@ -55,10 +60,11 @@ iamCheck <- function(x, pdf=NULL, cfg="IAMC", val="IAMC", verbose=TRUE) {
   # convert x to magclass format as alternative source for checks
   mx <- collapseNames(as.magpie(x), collapsedim = 4)
 
-  processCheck(checkBounds(mx=mx, cfg=cfg, type="min"), verbose)
-  processCheck(checkBounds(mx=mx, cfg=cfg, type="max"), verbose)
+  processCheck(checkBounds(mx=mx, cfg=cfg, type="min"), e)
+  processCheck(checkBounds(mx=mx, cfg=cfg, type="max"), e)
 
  if(!is.null(pdf)) {
-   validationpdf(x=x,hist=iamValidationData(val=val),file = pdf)
+   validationpdf(x=x,hist=val,file = pdf)
  }
+ return(e$out)
 }

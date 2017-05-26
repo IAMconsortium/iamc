@@ -4,14 +4,16 @@
 \alias{processCheck}
 \title{processCheck}
 \usage{
-processCheck(check, verbose = TRUE)
+processCheck(check, env)
 }
 \arguments{
-\item{verbose}{Boolean influencing the degree of information returned by the function. \code{verbose=TRUE} returns
-detailed information whereas \code{verbose=FALSE} returns a summary.}
+\item{check}{function call that should be run}
+
+\item{env}{Environment containing all relevant settings but also outputs of previous checks.
+Outputs of the given check function will be added to the environment}
 }
 \value{
-summary of check results
+environment containing all settings and outputs
 }
 \description{
 Processes a check, which means that it returns a note if the check fails, returns a check summary based on the chosen
@@ -21,8 +23,9 @@ that should show up for the test and "failed" which is a vector of names for whi
 }
 \examples{
 
-processCheck(iamc:::checkVariable(example_magpie, cfg=iamVariables()))
-
+e <- processCheck(iamc:::checkVariable(example_magpie, cfg=iamVariables()), env=new.env())
+e$out
+rm(out, envir=e)
 }
 \seealso{
 \code{\link{iamVariables}}, \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
