@@ -24,6 +24,11 @@ collectFunctions <- function(pattern="^check", globalenv=FALSE, allowed_args=c("
   funcs <- paste0("iamc:::",ls(getNamespace("iamc"), pattern=pattern))
   if(globalenv) {
     funcs <- c(funcs, ls(globalenv(),pattern=pattern))
+    funcnames <- sub("^.*:::","",funcs)
+    if(anyDuplicated(funcnames)) {
+      warning("Function name(s) in global environment match name(s) in iamc package. Function(s) \"",paste(funcnames[duplicated(funcnames)],collapse="\", \""),"\" in global environment will be ignored. Please use different function name(s)!")
+      funcs <- funcs[!duplicated(funcnames)]
+    }
   }
 
   checks <- NULL
