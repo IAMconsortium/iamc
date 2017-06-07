@@ -4,7 +4,8 @@
 \alias{iamCheck}
 \title{iamCheck}
 \usage{
-iamCheck(x, pdf = NULL, cfg = "IAMC", val = "IAMC", verbose = TRUE)
+iamCheck(x, pdf = NULL, cfg = "IAMC", val = "IAMC", verbose = TRUE,
+  globalenv = FALSE)
 }
 \arguments{
 \item{x}{Input data that should be checked, provided as a file path to a reporting file,
@@ -22,6 +23,9 @@ file or a quitte object containing the data.}
 
 \item{verbose}{Boolean influencing the degree of information returned by the function. \code{verbose=TRUE} returns
 detailed information whereas \code{verbose=FALSE} returns a summary.}
+
+\item{globalenv}{Boolean deciding whether functions in the global environment should be considered
+or not.}
 }
 \value{
 list of all outputs created by the performed checks

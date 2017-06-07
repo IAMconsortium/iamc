@@ -15,6 +15,8 @@
 #' file or a quitte object containing the data.
 #' @param verbose Boolean influencing the degree of information returned by the function. \code{verbose=TRUE} returns
 #' detailed information whereas \code{verbose=FALSE} returns a summary.
+#' @param globalenv Boolean deciding whether functions in the global environment should be considered
+#' or not.
 #' @return list of all outputs created by the performed checks
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{iamVariables}}, \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
@@ -28,7 +30,7 @@
 #' @importFrom mip validationpdf
 #' @export
 
-iamCheck <- function(x, pdf=NULL, cfg="IAMC", val="IAMC", verbose=TRUE) {
+iamCheck <- function(x, pdf=NULL, cfg="IAMC", val="IAMC", verbose=TRUE, globalenv=FALSE) {
 
   if(missing(x)) stop("x needs to be provided!")
 
@@ -51,20 +53,24 @@ iamCheck <- function(x, pdf=NULL, cfg="IAMC", val="IAMC", verbose=TRUE) {
   variables <- intersect(x$variable, cfg$variable)
   cfg <- cfg[cfg$variable %in% variables,]
 
+  input <- list(x=x, cfg=cfg, val=val)
+
   # check variable names
-  out  <- processCheck(checkVariable(x=x, cfg=cfg), e)
+  processCheck("filterVariables(x, cfg)", e, input)
 
   # filter x based on variable check (as only settings for allowed variable names are available)
-  x  <- as.quitte(droplevels(x[!(x$variable %in% out$checkVariable$failed),]))
+  input$x <- as.quitte(input$x[input$x$variable %in% variables,])
 
   # convert x to magclass format as alternative source for checks
-  mx <- collapseNames(as.magpie(x), collapsedim = 4)
+  input$mx <- collapseNames(as.magpie(x), collapsedim = 4)
 
-  processCheck(checkBounds(mx=mx, cfg=cfg, type="min"), e)
-  processCheck(checkBounds(mx=mx, cfg=cfg, type="max"), e)
+  checks <- collectFunctions("^check", globalenv=globalenv, allowed_args=names(input))
+  for(check in checks) {
+    processCheck(check, e, input)
+  }
 
- if(!is.null(pdf)) {
-   validationpdf(x=x,hist=val,file = pdf)
- }
- return(e$out)
+  if(!is.null(pdf)) {
+    validationpdf(x=x,hist=val,file = pdf)
+  }
+  return(e$out)
 }

@@ -42,5 +42,9 @@ collectFunctions <- function(pattern="^check", globalenv=FALSE, allowed_args=c("
       warning("Function \"",func,"\" ignored because of invalid arguments (",paste(invalid_args, collapse=", "),")")
     }
   }
+
+  #remove package prefix
+  checks <- sub("^.*:::","",checks)
+
   return(checks)
 }
