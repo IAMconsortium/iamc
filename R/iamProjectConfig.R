@@ -1,20 +1,20 @@
-#' iamVariables
+#' iamProjectConfig
 #'
-#' Function to return available variables and corresponding properties for a given configuration (e.g. project).
+#' Function to return available variables and corresponding properties for a given project configuration.
 #'
-#' @param cfg Configuration that should be used. Either a project name (currently available: "IAMC"), a path to a
+#' @param cfg Project configuration that should be used. Either a project name (currently available: "IAMC"), a path to a
 #' config file or a data frame specifying available variables and corresponding properties
 #' @return data frame containing avaible variables and corresponding properties
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
 #' @examples
-#' iamVariables()
+#' iamProjectConfig()
 #'
 #' @importFrom utils read.csv
 #' @importFrom dplyr tbl_df
 #' @export
 
-iamVariables <- function(cfg="IAMC") {
+iamProjectConfig <- function(cfg="IAMC") {
 
   #read config file
   if(!is.character(cfg) & !is.data.frame(cfg)) stop("Illegal cfg. Configuration must be provided as poject name, file path or data frame!")

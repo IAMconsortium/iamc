@@ -2,8 +2,8 @@
 
 export(collectFunctions)
 export(iamCheck)
+export(iamProjectConfig)
 export(iamValidationData)
-export(iamVariables)
 export(processCheck)
 importFrom(dplyr,tbl_df)
 importFrom(magclass,as.magpie)

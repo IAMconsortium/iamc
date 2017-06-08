@@ -5,7 +5,7 @@
 \title{iamCheck}
 \usage{
 iamCheck(x, pdf = NULL, cfg = "IAMC", val = "IAMC", verbose = TRUE,
-  globalenv = FALSE)
+  globalenv = FALSE, ...)
 }
 \arguments{
 \item{x}{Input data that should be checked, provided as a file path to a reporting file,
@@ -14,9 +14,9 @@ a quitte object or an object which can be converted to quitte using \code{\link[
 \item{pdf}{File name used for a PDF containing diagnostic results of the check. If set to NULL
 no pdf will be written.}
 
-\item{cfg}{Configuration that should be used. Either a project name (currently available: "IAMC"), a path to a
+\item{cfg}{Project configuration that should be used. Either a project name (currently available: "IAMC"), a path to a
 config file or a data frame specifying available variables and corresponding properties as returned by
-\code{\link{iamVariables}()}.}
+\code{\link{iamProjectConfig}()}.}
 
 \item{val}{Validation data for comparison. Either a project name (currently available: "IAMC"), a path to a mif
 file or a quitte object containing the data.}
@@ -26,6 +26,8 @@ detailed information whereas \code{verbose=FALSE} returns a summary.}
 
 \item{globalenv}{Boolean deciding whether functions in the global environment should be considered
 or not.}
+
+\item{...}{additional data objects which are forwarded to the check functions}
 }
 \value{
 list of all outputs created by the performed checks
@@ -41,7 +43,7 @@ iamCheck(example_magpie)
 
 }
 \seealso{
-\code{\link{iamVariables}}, \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
+\code{\link{iamProjectConfig}}, \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
 }
 \author{
 Jan Philipp Dietrich

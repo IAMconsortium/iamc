@@ -4,18 +4,15 @@
 \alias{processCheck}
 \title{processCheck}
 \usage{
-processCheck(check, env, input)
+processCheck(check, input)
 }
 \arguments{
 \item{check}{function call as character that should be run}
 
-\item{env}{Environment containing all relevant settings but also outputs of previous checks.
-Outputs of the given check function will be added to the environment}
-
 \item{input}{named list with elements available for check functions}
 }
 \value{
-environment containing all settings and outputs
+list containing check results
 }
 \description{
 Processes a check, which means that it returns a note if the check fails, returns a check summary based on the chosen
@@ -25,14 +22,11 @@ that should show up for the test and "failed" which is a vector of names for whi
 }
 \examples{
 
-e <- processCheck(check = "filterVariables(x, cfg)",
-                  env = new.env(),
-                  input = list(x=example_magpie, cfg=iamVariables()))
-e$out
-rm(out, envir=e)
+out <- processCheck(check = "filterVariables(x, cfg)",
+                  input = list(x=example_magpie, cfg=iamProjectConfig()))
 }
 \seealso{
-\code{\link{iamVariables}}, \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
+\code{\link{iamProjectConfig}}, \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
 }
 \author{
 Jan Philipp Dietrich
