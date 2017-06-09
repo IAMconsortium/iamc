@@ -23,7 +23,7 @@ that should show up for the test and "failed" which is a vector of names for whi
 \examples{
 
 out <- processCheck(check = "filterVariables(x, cfg)",
-                  input = list(x=example_magpie, cfg=iamProjectConfig()))
+                  input = list(x=example_landcover, cfg=iamProjectConfig()))
 }
 \seealso{
 \code{\link{iamProjectConfig}}, \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}

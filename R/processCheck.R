@@ -13,7 +13,7 @@
 #' @examples
 #'
 #' out <- processCheck(check = "filterVariables(x, cfg)",
-#'                   input = list(x=example_magpie, cfg=iamProjectConfig()))
+#'                   input = list(x=example_landcover, cfg=iamProjectConfig()))
 #' @importFrom methods is
 #' @export
 

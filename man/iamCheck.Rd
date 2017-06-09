@@ -4,7 +4,7 @@
 \alias{iamCheck}
 \title{iamCheck}
 \usage{
-iamCheck(x, pdf = NULL, cfg = "IAMC", val = "IAMC", verbose = TRUE,
+iamCheck(x, pdf = NULL, cfg = "CDLINKS", val = "IAMC", verbose = TRUE,
   globalenv = FALSE, ...)
 }
 \arguments{
@@ -14,7 +14,7 @@ a quitte object or an object which can be converted to quitte using \code{\link[
 \item{pdf}{File name used for a PDF containing diagnostic results of the check. If set to NULL
 no pdf will be written.}
 
-\item{cfg}{Project configuration that should be used. Either a project name (currently available: "IAMC"), a path to a
+\item{cfg}{Project configuration that should be used. Either a project name (currently available: "CDLINKS"), a path to a
 config file or a data frame specifying available variables and corresponding properties as returned by
 \code{\link{iamProjectConfig}()}.}
 
@@ -30,7 +30,7 @@ or not.}
 \item{...}{additional data objects which are forwarded to the check functions}
 }
 \value{
-list of all outputs created by the performed checks
+list of all outputs created by the performed checks (invisible)
 }
 \description{
 Runs various diagnostics over a provided data set checking whether
@@ -39,7 +39,7 @@ the provided data is in line with IAMC database guidelines.
 \examples{
 
 # run check with example data
-iamCheck(example_magpie)
+iamCheck(example_landcover)
 
 }
 \seealso{

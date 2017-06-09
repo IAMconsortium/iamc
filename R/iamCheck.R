@@ -8,7 +8,7 @@
 #' a quitte object or an object which can be converted to quitte using \code{\link[quitte]{as.quitte}}
 #' @param pdf File name used for a PDF containing diagnostic results of the check. If set to NULL
 #' no pdf will be written.
-#' @param cfg Project configuration that should be used. Either a project name (currently available: "IAMC"), a path to a
+#' @param cfg Project configuration that should be used. Either a project name (currently available: "CDLINKS"), a path to a
 #' config file or a data frame specifying available variables and corresponding properties as returned by
 #' \code{\link{iamProjectConfig}()}.
 #' @param val Validation data for comparison. Either a project name (currently available: "IAMC"), a path to a mif
@@ -18,20 +18,19 @@
 #' @param globalenv Boolean deciding whether functions in the global environment should be considered
 #' or not.
 #' @param ... additional data objects which are forwarded to the check functions
-#' @return list of all outputs created by the performed checks
+#' @return list of all outputs created by the performed checks (invisible)
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{iamProjectConfig}}, \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
 #' @examples
 #'
 #' # run check with example data
-#' iamCheck(example_magpie)
+#' iamCheck(example_landcover)
 #'
 #' @importFrom quitte as.quitte is.quitte
 #' @importFrom magclass as.magpie collapseNames
-#' @importFrom mip validationpdf
 #' @export
 
-iamCheck <- function(x, pdf=NULL, cfg="IAMC", val="IAMC", verbose=TRUE, globalenv=FALSE, ...) {
+iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=TRUE, globalenv=FALSE, ...) {
 
   if(missing(x)) stop("x needs to be provided!")
 
@@ -65,8 +64,8 @@ iamCheck <- function(x, pdf=NULL, cfg="IAMC", val="IAMC", verbose=TRUE, globalen
   for(check in checks) out <- c(out, processCheck(check, input))
 
   # write output pdf
-  if(!is.null(pdf)) validationpdf(x=x,hist=val,file = pdf)
+  if(!is.null(pdf)) iamSummaryPDF(input = input, check_results = out, file = pdf)
 
   # return check results
-  return(out)
+  invisible(out)
 }

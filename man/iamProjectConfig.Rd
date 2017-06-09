@@ -4,10 +4,10 @@
 \alias{iamProjectConfig}
 \title{iamProjectConfig}
 \usage{
-iamProjectConfig(cfg = "IAMC")
+iamProjectConfig(cfg = "CDLINKS")
 }
 \arguments{
-\item{cfg}{Project configuration that should be used. Either a project name (currently available: "IAMC"), a path to a
+\item{cfg}{Project configuration that should be used. Either a project name (currently available: "CDLINKS"), a path to a
 config file or a data frame specifying available variables and corresponding properties}
 }
 \value{
