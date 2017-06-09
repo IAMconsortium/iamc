@@ -27,7 +27,30 @@ This returns information about the checks performed and the problems found in th
 
 ## Adding own checks
 
-...
+It is possible to add own checks. All check functions should have a name starting with "check" and use values available in iamCheck, which
+are current x (the provided data to be tested as quitte object), mx (the same data as magclass object), cfg (the project configuration) and val (some validation data). 
+
+The function needs to return a list of two objects: "message" which is the message which should show up at the end of the test with the place holder "%#" for the number of elements for which the test failed and "failed" which is a character vector of objects for which the test failed.
+
+By default iamCheck will only look for checks which are available within the package, but with the argument `globalenv = TRUE` it will also search the global environment for functions. 
+
+To add for instance a unit check to the it, you can write a function `checkUnits` following the rules mentioned above and run `iamCheck` with `globalenv = TRUE`: 
+
+```{r, echo=TRUE}
+library(iamc)
+
+checkUnits <- function(x, cfg) {
+  x_var_unit <- unique(paste(x$variable, x$unit, sep=" | unit: "))
+  cfg_var_unit <- unique(paste(cfg$variable, cfg$unit, sep=" | unit: "))
+  failed <- x_var_unit[!(x_var_unit %in% cfg_var_unit)]
+  return(list(message="%# variables are reported in the wrong unit",
+              failed=failed))
+}
+
+iamCheck(example_landcover, globalenv=TRUE)
+```
+
+As soon as the new check is working it would be nice if you could add it to the package so that others could use it as well.
 
 
 
