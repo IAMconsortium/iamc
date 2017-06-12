@@ -4,7 +4,7 @@
 \alias{iamSummaryPDF}
 \title{iamSummaryPDF}
 \usage{
-iamSummaryPDF(input, check_results = NULL, file = "summary.pdf")
+iamSummaryPDF(input, check_results = NULL, file = "summary.pdf", ...)
 }
 \arguments{
 \item{input}{named list with elements available for check functions}
@@ -12,6 +12,8 @@ iamSummaryPDF(input, check_results = NULL, file = "summary.pdf")
 \item{check_results}{list with check results as returned by \code{\link{iamCheck}}}
 
 \item{file}{File name the summary should be written to.}
+
+\item{...}{additional arguments sent to \code{\link[lusweave]{swclose}}}
 }
 \description{
 Creates a PDF summarizing check results and adding
