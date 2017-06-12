@@ -30,7 +30,7 @@ or not.}
 \item{...}{additional data objects which are forwarded to the check functions}
 }
 \value{
-list of all outputs created by the performed checks (invisible)
+list of all inputs and outputs created by the performed checks (invisible)
 }
 \description{
 Runs various diagnostics over a provided data set checking whether

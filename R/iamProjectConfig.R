@@ -26,7 +26,7 @@ iamProjectConfig <- function(cfg="CDLINKS") {
     } else if(!file.exists(cfg)) {
       stop("Given cfg setting is neither a project for which a configuration exists nor an existing configuration file!")
     }
-    cfg <- read.csv(cfg, sep=";")
+    cfg <- read.csv(cfg, sep=";", stringsAsFactors = FALSE)
   }
 
   return(tbl_df(cfg))

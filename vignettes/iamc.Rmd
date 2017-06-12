@@ -9,6 +9,10 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, echo = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
 ## Purpose and Functionality
 
 The iamc R package is a collection of R tools provided by the Integrated Assessment Modeling Consortium (IAMC) for data analysis and diagnostics. It can be used to make sure that a data set is in line with rules set by a given project. This rules can be for instance a given naming convention or unit conventions for variables, but also qualitative measures such as that certain variables lie between certain bounds. Besides that the data can be compared to given validation data.
@@ -16,14 +20,32 @@ The iamc R package is a collection of R tools provided by the Integrated Assessm
 
 ## A simple example
 
-The package comes with small example data set `example_landcover` which contains some land cover data calculated in the CDLINKS project. To show the functionality of the package some mistakes have been introduced into the data set. To find these mistakes you can feed the object to the check function `iamCheck`
+The package comes with small example data set `example_landcover` which contains land cover data calculated in the CDLINKS project. To show the functionality of the package some mistakes have been introduced into the data set. To find these mistakes you can feed the object to the check function `iamCheck`:
 
 ```{r, echo=TRUE}
 library(iamc)
-iamCheck(example_landcover)
+iamCheck(example_landcover, cfg="CDLINKS")
 ```
 
-This returns information about the checks performed and the problems found in the data.
+This returns information about the checks performed and the problems found in the data. 
+
+## Introduce customized project settings
+
+Setting `cfg="CDLINKS"` in the example above makes sure, that the data is analyzed based on a CDLINKS rule set. It is possible to use other project settings instead. One way is to load an existing cfg project settings and customize it. In the following example we take the existsing CDLINKS config, introduce the so far unknown variable `Land Cover|Built-upS Area` by renaming `Land Cover|Built-up Area` and set its maximum value to 100:
+
+```{r, echo=TRUE}
+# load cfg
+cfg <- iamProjectConfig("CDLINKS")
+
+# modify cfg
+cfg$variable[cfg$variable=="Land Cover|Built-up Area"] <- "Land Cover|Built-upS Area"
+cfg$max[cfg$variable=="Land Cover|Built-upS Area"] <- 100
+
+# run check with new cfg
+iamCheck(example_landcover, cfg=cfg)
+```
+
+
 
 ## Adding own checks
 
@@ -48,6 +70,13 @@ checkUnits <- function(x, cfg) {
 }
 
 iamCheck(example_landcover, globalenv=TRUE)
+
+# run again with modified cfg to trigger unit warning
+cfg <- iamProjectConfig("CDLINKS")
+cfg$unit[cfg$variable=="Land Cover"] <- "weird_unit"
+
+iamCheck(example_landcover, cfg=cfg, globalenv=TRUE)
+
 ```
 
 As soon as the new check is working it would be nice if you could add it to the package so that others could use it as well.

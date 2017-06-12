@@ -18,7 +18,7 @@
 #' @param globalenv Boolean deciding whether functions in the global environment should be considered
 #' or not.
 #' @param ... additional data objects which are forwarded to the check functions
-#' @return list of all outputs created by the performed checks (invisible)
+#' @return list of all inputs and outputs created by the performed checks (invisible)
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{iamProjectConfig}}, \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
 #' @examples
@@ -67,5 +67,5 @@ iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=TRUE, globa
   if(!is.null(pdf)) iamSummaryPDF(input = input, check_results = out, file = pdf)
 
   # return check results
-  invisible(out)
+  invisible(list(out=out, input=input))
 }
