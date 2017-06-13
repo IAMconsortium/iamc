@@ -34,34 +34,58 @@ iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=TRUE, globa
 
   if(missing(x)) stop("x needs to be provided!")
 
+  # -------------------------- create input data ------------------------------
+
+  if(missing(x)) stop("x needs to be provided!")
+
+  # LB/CA put as.quitte and error message together
+  # test whether x could be converted to quitte object
+  xQitte <- as.quitte(x)
+  if(is(xQitte,"try-error")) stop("Incompatible data input format. Data could not be converted to quitte object!")
+
   #building input data object
-  input <- list(x       = try(as.quitte(x)),      # data to be tested
+  input <- list(x       = xQitte,                # data to be tested
                 verbose = verbose,                # verbosity
                 cfg     = iamProjectConfig(cfg),  # read project config
                 val     = iamValidationData(val), # read validation data
                 ... )                             # additional input data
 
-  # test whether x could be converted to quitte object
-  if(is(input$x,"try-error")) stop("Incompatible data input format. Data could not be converted to quitte object!")
+  # convert x to magclass format as alternative source for checks and drop unit
+ # input$mx <- collapseNames(as.magpie(input$x), collapsedim = "unit")
+  input$mx <- collapseNames(as.magpie(input$x), collapsedim = 4)    # "unit" did not work  XXX
+
+  # ----------------------------------------------------------------------------
+
+  # -------------------------- filter input data -------------------------------
 
   #reduce config to variables which exist in x
-  variables <- intersect(input$x$variable, input$cfg$variable)
-  input$cfg <- input$cfg[input$cfg$variable %in% variables,]
+  intersectVariables <- intersect(input$x$variable, input$cfg$variable)   #save?
+  # check variable occurence/existence
+  # all variables that are in x but not in template cfg
+  out <- processCheck("preCheckVariables(input$x, intersectVariables, type='x')", input)
+  # all variables that are not in x but maybe important
+  out <- processCheck("preCheckVariables(input$cfg, intersectVariables, type='cfg')", input)
 
-  # check variable names
-  out <- processCheck("filterVariables(x, cfg)", input)
+  # reduce cfg to variables which exist in cfg
+  input$cfg <- input$cfg[input$cfg$variable %in% intersectVariables,]
+  # reduce x to variables which exist in cfg
+  input$x <- input$x[input$x$variable %in% intersectVariables,]
+  # reduce mx to variables which exist in cfg
+  input$mx <- input$mx[,,intersectVariables]
 
-  # reduce x to variables which exist in config
-  input$x <- as.quitte(droplevels(input$x[input$x$variable %in% variables,]))
+  # ----------------------------------------------------------------------------
 
-  # convert x to magclass format as alternative source for checks and drop unit
-  input$mx <- collapseNames(as.magpie(input$x), collapsedim = "unit")
+  # -------------------------- collect all available checks --------------------
 
-  # collect all available checks
   checks <- collectFunctions("^check", globalenv=globalenv, allowed_args=names(input))
 
-  # run collected checks
+  # ----------------------------------------------------------------------------
+
+  # -------------------------- run collected checks ----------------------------
+
   for(check in checks) out <- c(out, processCheck(check, input))
+
+  # ----------------------------------------------------------------------------
 
   # write output pdf
   if(!is.null(pdf)) iamSummaryPDF(input = input, check_results = out, file = pdf)
