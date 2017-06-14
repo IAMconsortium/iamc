@@ -40,7 +40,7 @@ iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=TRUE, globa
 
   # LB/CA put as.quitte and error message together
   # test whether x could be converted to quitte object
-  xQitte <- as.quitte(x)
+  xQitte <- try(as.quitte(x))
   if(is(xQitte,"try-error")) stop("Incompatible data input format. Data could not be converted to quitte object!")
 
   #building input data object
@@ -51,8 +51,7 @@ iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=TRUE, globa
                 ... )                             # additional input data
 
   # convert x to magclass format as alternative source for checks and drop unit
- # input$mx <- collapseNames(as.magpie(input$x), collapsedim = "unit")
-  input$mx <- collapseNames(as.magpie(input$x), collapsedim = 4)    # "unit" did not work  XXX
+  input$mx <- collapseNames(as.magpie(input$x), collapsedim = "unit")
 
   # ----------------------------------------------------------------------------
 
@@ -61,10 +60,11 @@ iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=TRUE, globa
   #reduce config to variables which exist in x
   intersectVariables <- intersect(input$x$variable, input$cfg$variable)   #save?
   # check variable occurence/existence
+  input$intersectVariables <- intersectVariables
   # all variables that are in x but not in template cfg
-  out <- processCheck("preCheckVariables(input$x, intersectVariables, type='x')", input)
+  out <- processCheck("preCheckVariables(x, intersectVariables, type='x')", input)
   # all variables that are not in x but maybe important
-  out <- processCheck("preCheckVariables(input$cfg, intersectVariables, type='cfg')", input)
+  out <- processCheck("preCheckVariables(cfg, intersectVariables, type='cfg')", input)
 
   # reduce cfg to variables which exist in cfg
   input$cfg <- input$cfg[input$cfg$variable %in% intersectVariables,]
