@@ -34,58 +34,24 @@ iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=TRUE, globa
 
 
   if(missing(x)) stop("x needs to be provided!")
+
+  # initialize variables
+  input <- NULL
   out <- NULL
 
   # -------------------------- create input data ------------------------------
-
-  if(missing(x)) stop("x needs to be provided!")
-
-  # LB/CA put as.quitte and error message together
-  # test whether x could be converted to quitte object
-  xQitte <- try(as.quitte(x))
-  if(is(xQitte,"try-error")) stop("Incompatible data input format. Data could not be converted to quitte object!")
-
-  #building input data object
-  input <- list(x       = xQitte,                # data to be tested
-                verbose = verbose,                # verbosity
-                cfg     = iamProjectConfig(cfg),  # read project config
-                val     = iamValidationData(val), # read validation data
-                ... )                             # additional input data
-
-  # convert x to magclass format as alternative source for checks and drop unit
-  input$mx <- collapseNames(as.magpie(input$x), collapsedim = "unit")
-
+  input <- createInputData(x, cfg, val, verbose)
   # ----------------------------------------------------------------------------
 
   # -------------------------- filter input data -------------------------------
-
-  #reduce config to variables which exist in x
-  intersectVariables <- intersect(input$x$variable, input$cfg$variable)   #save?
-  input$intersectVariables <- intersectVariables
-
-  # check variable occurence/existence and output result
-  preChecks <- collectFunctions("^preCheck", globalenv=globalenv, allowed_args=names(input))
-  for(preCheck in preChecks) out <- c(out, processCheck(preCheck, input))
-
-  # reduce cfg to variables which exist in cfg
-  input$cfg <- input$cfg[input$cfg$variable %in% intersectVariables,]
-  # reduce x to variables which exist in cfg
-  input$x <- input$x[input$x$variable %in% intersectVariables,]
-  # reduce mx to variables which exist in cfg
-  input$mx <- input$mx[,,intersectVariables]
-
+  resultFiltering <- filterInputData(input, cfg, globalenv, out)
+  input <- resultFiltering$input
+  out <- resultFiltering$out
   # ----------------------------------------------------------------------------
 
-  # -------------------------- collect all available checks --------------------
-
+  # -------------------------- collect and run available checks --------------------
   checks <- collectFunctions("^check", globalenv=globalenv, allowed_args=names(input))
-
-  # ----------------------------------------------------------------------------
-
-  # -------------------------- run collected checks ----------------------------
-
   for(check in checks) out <- c(out, processCheck(check, input))
-
   # ----------------------------------------------------------------------------
 
   # write output pdf
