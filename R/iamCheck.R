@@ -32,7 +32,9 @@
 
 iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=TRUE, globalenv=FALSE, ...) {
 
+
   if(missing(x)) stop("x needs to be provided!")
+  out <- NULL
 
   # -------------------------- create input data ------------------------------
 
@@ -59,12 +61,11 @@ iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=TRUE, globa
 
   #reduce config to variables which exist in x
   intersectVariables <- intersect(input$x$variable, input$cfg$variable)   #save?
-  # check variable occurence/existence
   input$intersectVariables <- intersectVariables
-  # all variables that are in x but not in template cfg
-  out <- processCheck("preCheckVariables(x, intersectVariables, type='x')", input)
-  # all variables that are not in x but maybe important
-  out <- processCheck("preCheckVariables(cfg, intersectVariables, type='cfg')", input)
+
+  # check variable occurence/existence and output result
+  preChecks <- collectFunctions("^preCheck", globalenv=globalenv, allowed_args=names(input))
+  for(preCheck in preChecks) out <- c(out, processCheck(preCheck, input))
 
   # reduce cfg to variables which exist in cfg
   input$cfg <- input$cfg[input$cfg$variable %in% intersectVariables,]
