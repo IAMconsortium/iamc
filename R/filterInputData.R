@@ -8,6 +8,7 @@
 #' config file or a data frame specifying available variables and corresponding properties as returned by
 #' \code{\link{iamProjectConfig}()}.
 #' @param globalenv Boolean deciding whether functions in the global environment should be considered
+#' @param out list to be filled for status-output
 #' @return list with 1) filtered input and 2) status-output about illegal or missing variables
 #' @author Cornelia Auer
 

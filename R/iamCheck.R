@@ -26,8 +26,6 @@
 #' # run check with example data
 #' iamCheck(example_landcover)
 #'
-#' @importFrom quitte as.quitte is.quitte
-#' @importFrom magclass as.magpie collapseNames
 #' @export
 
 iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=TRUE, globalenv=FALSE, ...) {
@@ -35,28 +33,25 @@ iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=TRUE, globa
 
   if(missing(x)) stop("x needs to be provided!")
 
-  # initialize variables
+  # init ------------------------------
   input <- NULL
   out <- NULL
 
-  # -------------------------- create input data ------------------------------
-  input <- createInputData(x, cfg, val, verbose)
-  # ----------------------------------------------------------------------------
+  # create input data ------------------------------
+  input <- createInputData(x, cfg, val, verbose, ...)
 
-  # -------------------------- filter input data -------------------------------
+  # filter input data -------------------------------
   resultFiltering <- filterInputData(input, cfg, globalenv, out)
   input <- resultFiltering$input
   out <- resultFiltering$out
-  # ----------------------------------------------------------------------------
 
-  # -------------------------- collect and run available checks --------------------
+  # collect and run available checks --------------------
   checks <- collectFunctions("^check", globalenv=globalenv, allowed_args=names(input))
   for(check in checks) out <- c(out, processCheck(check, input))
-  # ----------------------------------------------------------------------------
 
-  # write output pdf
+  # write output pdf --------------------
   if(!is.null(pdf)) iamSummaryPDF(input = input, check_results = out, file = pdf)
 
-  # return check results
+  # return check results --------------------
   invisible(list(out=out, input=input))
 }

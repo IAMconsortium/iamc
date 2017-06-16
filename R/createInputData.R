@@ -11,12 +11,14 @@
 #' file or a quitte object containing the data.
 #' @param verbose Boolean influencing the degree of information returned by the function. \code{verbose=TRUE} returns
 #' detailed information whereas \code{verbose=FALSE} returns a summary.
-#' @return list with 1) filtered input and 2) status-output about illegal or missing variables
+#' @param ... additional data objects which are forwarded to the check functions
 #' @return input named list with elements available for check functions
 #' @author Cornelia Auer
 
+#' @importFrom quitte as.quitte is.quitte
+#' @importFrom magclass as.magpie collapseNames
 
-createInputData <- function(x, cfg="CDLINKS", val="IAMC", verbose=TRUE)
+createInputData <- function(x, cfg="CDLINKS", val="IAMC", verbose=TRUE, ...)
 {
 
   # test whether x could be converted to quitte object
@@ -27,8 +29,8 @@ createInputData <- function(x, cfg="CDLINKS", val="IAMC", verbose=TRUE)
   input <- list(x       = xQitte,                # data to be tested
                 verbose = verbose,                # verbosity
                 cfg     = iamProjectConfig(cfg),  # read project config
-                val     = iamValidationData(val)) #, # read validation data
-                #... )                             # additional input data
+                val     = iamValidationData(val), #, # read validation data
+                ... )                             # additional input data
 
   # convert x to magclass format as alternative source for checks and drop unit
   input$mx <- collapseNames(as.magpie(input$x), collapsedim = "unit")
