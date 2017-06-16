@@ -20,11 +20,11 @@ The iamc R package is a collection of R tools provided by the Integrated Assessm
 
 ## A simple example
 
-The package comes with small example data set `example_landcover` which contains land cover data calculated in the CDLINKS project. To show the functionality of the package some mistakes have been introduced into the data set. To find these mistakes you can feed the object to the check function `iamCheck`:
+The package comes with small example data set `example_REMIND` which contains land cover data calculated in the CDLINKS project. To show the functionality of the package some mistakes have been introduced into the data set. To find these mistakes you can feed the object to the check function `iamCheck`:
 
 ```{r, echo=TRUE}
 library(iamc)
-iamCheck(example_landcover, cfg="CDLINKS")
+iamCheck(example_REMIND, cfg="CDLINKS")
 ```
 
 This returns information about the checks performed and the problems found in the data. 
@@ -42,7 +42,7 @@ cfg$variable[cfg$variable=="Land Cover|Built-up Area"] <- "Land Cover|Built-upS 
 cfg$max[cfg$variable=="Land Cover|Built-upS Area"] <- 100
 
 # run check with new cfg
-iamCheck(example_landcover, cfg=cfg)
+iamCheck(example_REMIND, cfg=cfg)
 ```
 
 
@@ -69,13 +69,13 @@ checkUnits <- function(x, cfg) {
               failed=failed))
 }
 
-iamCheck(example_landcover, globalenv=TRUE)
+iamCheck(example_REMIND, globalenv=TRUE)
 
 # run again with modified cfg to trigger unit warning
 cfg <- iamProjectConfig("CDLINKS")
 cfg$unit[cfg$variable=="Land Cover"] <- "weird_unit"
 
-iamCheck(example_landcover, cfg=cfg, globalenv=TRUE)
+iamCheck(example_REMIND, cfg=cfg, globalenv=TRUE)
 
 ```
 

@@ -33,25 +33,25 @@ iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=TRUE, globa
 
   if(missing(x)) stop("x needs to be provided!")
 
-  # init ------------------------------
+  # init ------------------------------------------------
   input <- NULL
-  out <- NULL
+  out   <- NULL
 
-  # create input data ------------------------------
+  # create input data -----------------------------------
   input <- createInputData(x, cfg, val, verbose, ...)
 
-  # filter input data -------------------------------
+  # filter input data -----------------------------------
   resultFiltering <- filterInputData(input, cfg, globalenv, out)
-  input <- resultFiltering$input
-  out <- resultFiltering$out
+  input           <- resultFiltering$input
+  out             <- resultFiltering$out
 
   # collect and run available checks --------------------
   checks <- collectFunctions("^check", globalenv=globalenv, allowed_args=names(input))
   for(check in checks) out <- c(out, processCheck(check, input))
 
-  # write output pdf --------------------
+  # write output pdf ------------------------------------
   if(!is.null(pdf)) iamSummaryPDF(input = input, check_results = out, file = pdf)
 
-  # return check results --------------------
+  # return check results --------------------------------
   invisible(list(out=out, input=input))
 }
