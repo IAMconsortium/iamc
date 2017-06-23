@@ -35,4 +35,9 @@ vignette("iamc")
 
 ## Questions / Problems
 
-In case of questions / problems please contact Jan Dietrich <dietrich@pik-potsdam.de>.
+In case of questions / problems please contact Jan Dietrich <dietrich@pik-potsdam.de> or take a look at the short FAQ below
+
+## FAQ
+Q: Pdflatex reports an error if I want to generate my output PDF. Why? 
+A: Please check if the automatic installation of styles is allowed for pdflatex.
+If not the pdf creation process is stopped by un-installed style packages (e.g. packageXY.sty). 
