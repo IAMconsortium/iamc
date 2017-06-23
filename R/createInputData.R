@@ -4,7 +4,7 @@
 #'
 #' @param x Input data that should be checked, provided as a file path to a reporting file,
 #' a quitte object or an object which can be converted to quitte using \code{\link[quitte]{as.quitte}}
-#' @param cfg Project configuration that should be used. Either a project name (currently available: "examplePROJECT"), a path to a
+#' @param cfg Project configuration that should be used (currently available: "CDLINKS"). Either a project name, a path to a
 #' config file or a data frame specifying available variables and corresponding properties as returned by
 #' \code{\link{iamProjectConfig}()}.
 #' @param val Validation data for comparison. Either a project name (currently available: "IAMC"), a path to a mif
@@ -18,7 +18,7 @@
 #' @importFrom quitte as.quitte is.quitte
 #' @importFrom magclass as.magpie collapseNames
 
-createInputData <- function(x, cfg="examplePROJECT", val="IAMC", verbose=TRUE, ...)
+createInputData <- function(x, cfg="CDLINKS", val="IAMC", verbose=TRUE, ...)
 {
 
   # test whether x could be converted to quitte object

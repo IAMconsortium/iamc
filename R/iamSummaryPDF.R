@@ -12,8 +12,8 @@
 #' @seealso \code{\link{iamCheck}}, \code{\link{iamProjectConfig}}
 #' @examples
 #' \dontrun{
-#' input <- list(x=example_landcover, val=iamValidationData())
-#' check_results <- iamCheck(example_landcover)
+#' input <- list(x=example_REMIND, val=iamValidationData())
+#' check_results <- iamCheck(example_REMIND)
 #'
 #' iamSummaryPDF(input, check_results)
 #' }

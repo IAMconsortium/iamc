@@ -3,12 +3,12 @@
 #' Filters given data (input) according to available default variables and
 #' returns status (out) about illegal or missing variables
 #'
-#' @param input named list with elements available for check functions
+#' @param input Named list with elements available for check functions
 #' @param cfg Project configuration that should be used. Either a project name (currently available: "CDLINKS"), a path to a
 #' config file or a data frame specifying available variables and corresponding properties as returned by
 #' \code{\link{iamProjectConfig}()}.
 #' @param globalenv Boolean deciding whether functions in the global environment should be considered
-#' @return list with 1) filtered input and 2) status-output about illegal or missing variables
+#' @return List with 1) filtered input and 2) status-output about illegal or missing variables
 #' @author Cornelia Auer
 
 

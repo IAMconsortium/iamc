@@ -8,7 +8,7 @@
 #' a quitte object or an object which can be converted to quitte using \code{\link[quitte]{as.quitte}}
 #' @param pdf File name used for a PDF containing diagnostic results of the check. If set to NULL
 #' no pdf will be written.
-#' @param cfg Project configuration that should be used. Either a project name (currently available: "examplePROJECT"), a path to a
+#' @param cfg Project configuration that should be used. Either a project name (currently available: "CDLINKS"), a path to a
 #' config file or a data frame specifying available variables and corresponding properties as returned by
 #' \code{\link{iamProjectConfig}()}.
 #' @param val Validation data for comparison. Either a project name (currently available: "IAMC"), a path to a mif
@@ -24,11 +24,11 @@
 #' @examples
 #'
 #' # run check with example data
-#' iamCheck(example_landcover)
+#' iamCheck(example_REMIND, cfg="example_CFG")
 #'
 #' @export
 
-iamCheck <- function(x, pdf=NULL, cfg="examplePROJECT", val="IAMC", verbose=FALSE, globalenv=FALSE, ...) {
+iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=FALSE, globalenv=FALSE, ...) {
 
 
   if(missing(x)) stop("x needs to be provided!")
