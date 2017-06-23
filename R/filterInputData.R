@@ -4,16 +4,15 @@
 #' returns status (out) about illegal or missing variables
 #'
 #' @param input named list with elements available for check functions
-#' @param cfg Project configuration that should be used. Either a project name (currently available: "examplePROJECT"), a path to a
+#' @param cfg Project configuration that should be used. Either a project name (currently available: "CDLINKS"), a path to a
 #' config file or a data frame specifying available variables and corresponding properties as returned by
 #' \code{\link{iamProjectConfig}()}.
 #' @param globalenv Boolean deciding whether functions in the global environment should be considered
-#' @param out list to be filled for status-output
 #' @return list with 1) filtered input and 2) status-output about illegal or missing variables
 #' @author Cornelia Auer
 
 
-filterInputData <- function(input, cfg="examplePROJECT", globalenv = FALSE, out = NULL )
+filterInputData <- function(input, cfg="CDLINKS", globalenv = FALSE, out = NULL )
 {
 
   #reduce config to variables which exist in x
@@ -30,6 +29,11 @@ filterInputData <- function(input, cfg="examplePROJECT", globalenv = FALSE, out 
   input$x <- input$x[input$x$variable %in% intersectVariables,]
   # reduce mx to variables which exist in cfg
   input$mx <- input$mx[,,intersectVariables]
+
+  if(dim(input$x)[1]==0) {
+    input$x <- NULL
+    input$mx <- NULL
+  }
 
   return (list("input" = input, "out" = out))
 

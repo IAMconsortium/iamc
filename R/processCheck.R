@@ -18,6 +18,7 @@
 #' @export
 
 processCheck <- function(check, input) {
+  limit <- 10
   if(is.null(input$verbose)) input$verbose <- TRUE
   for(i in names(input)) assign(i,input[[i]])
   funcname <- sub("\\(.*$","",check)
@@ -28,8 +29,13 @@ processCheck <- function(check, input) {
   }
   nfailed <- length(r$failed)
   message(funcname,": ",sub("%#",nfailed,r$message,fixed=TRUE))
-  if(nfailed>0 & input$verbose) {
-    for(elem in r$failed) message(paste("  ", elem))
+  if(nfailed>0) {
+    if(!input$verbose & nfailed > limit) {
+      elems <- c(r$failed[1:10], paste0("... ",nfailed-limit," more rows (set verbose=TRUE to get a full list)"))
+    } else {
+      elems <- r$failed
+    }
+    for(elem in elems) message(paste("  ", elem))
   }
   out <- list()
   out[[funcname]] <- r

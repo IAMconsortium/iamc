@@ -28,7 +28,7 @@
 #'
 #' @export
 
-iamCheck <- function(x, pdf=NULL, cfg="examplePROJECT", val="IAMC", verbose=TRUE, globalenv=FALSE, ...) {
+iamCheck <- function(x, pdf=NULL, cfg="examplePROJECT", val="IAMC", verbose=FALSE, globalenv=FALSE, ...) {
 
 
   if(missing(x)) stop("x needs to be provided!")
@@ -46,8 +46,12 @@ iamCheck <- function(x, pdf=NULL, cfg="examplePROJECT", val="IAMC", verbose=TRUE
   out             <- resultFiltering$out
 
   # collect and run available checks --------------------
-  checks <- collectFunctions("^check", globalenv=globalenv, allowed_args=names(input))
-  for(check in checks) out <- c(out, processCheck(check, input))
+  if(!is.null(input$x)) {
+    checks <- collectFunctions("^check", globalenv=globalenv, allowed_args=names(input))
+    for(check in checks) out <- c(out, processCheck(check, input))
+  } else {
+    message("There is no intersect between variables in data and config. Further checks are skipped!")
+  }
 
   # write output pdf ------------------------------------
   if(!is.null(pdf)) iamSummaryPDF(input = input, check_results = out, file = pdf)

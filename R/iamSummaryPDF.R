@@ -24,7 +24,6 @@
 
 
 iamSummaryPDF <- function(input, check_results=NULL, file="summary.pdf", ...) {
-  if(is.null(input$x)) stop("input list must at least contain x!")
 
   template <-  c("\\documentclass[a4paper, portrait ]{article}",
                  "\\setlength{\\parindent}{0in}",
@@ -81,6 +80,6 @@ iamSummaryPDF <- function(input, check_results=NULL, file="summary.pdf", ...) {
 
   swlatex(sw,"\\clearpage")
 
-  if(!is.null(input$val)) validationpdf(x=input$x, hist=input$val, file = sw, prefix = "Validation - ")
+  if(!is.null(input$val) & !is.null(input$x)) validationpdf(x=input$x, hist=input$val, file = sw, prefix = "Validation - ")
 
 }
