@@ -20,7 +20,7 @@ The iamc R package is a collection of R tools provided by the Integrated Assessm
 
 ## A simple example
 
-The package comes with small example data set `example_REMIND` supposed to be checked against the configuration 'ex'. To show the functionality of the package some mistakes have been introduced into the data set. To find these mistakes you can feed the object to the check function `iamCheck`:
+The package comes with a small example data set `example_REMIND` supposed to be checked against a configuration 'example_CFG' (strongly reduced for demonstration purposes). To show the functionality of the package some mistakes have been introduced into the example data set. To find these mistakes you can feed the input data set to the check function `iamCheck`:
 
 ```{r, echo=TRUE}
 library(iamc)
@@ -31,14 +31,14 @@ This returns information about the checks performed and the problems found in th
 
 ## Introduce customized project settings
 
-Setting `cfg="example_CFG"` in the example above makes sure, that the data is analyzed based on a rule set specified in 'example_CFG'. It is possible to use other project settings instead. One way is to load an existing cfg project settings and customize it. In the following example we take the existsing example_CFG config, introduce a unknown variable `Population_ERROR` by renaming `Population`. Second example sets a new maximum value for "FE"  to 200:
+Setting `cfg="example_CFG"` in the example above makes sure, that the data is analyzed based on a rule set specified in 'example_CFG'. It is possible to use other project settings instead. Another way is to load existing cfg project settings and customize it. In the following example we take the existing example_CFG config, introduce a unknown variable `Population_ERROR` by renaming `Population` (@Jan siehe Ergebnis in Vignette: dort steht 'preCheckIllegalVariables: data contains 3 non-standard variables: Population,...' Warum heißt das jetzt nicht Population_ERROR). Second example sets a new maximum value for "FE"  to 200:
 
 ```{r, echo=TRUE}
 # first example
 # load cfg
 cfg <- iamProjectConfig("example_CFG")
 # modify cfg
-cfg$variable[cfg$variable=="Population"] <- "Population_ERROR"
+cfg$variable[cfg$variable=="Population"] <- "AAAAA_Population_OtherName"
 # run check with new cfg
 iamCheck(example_REMIND, cfg=cfg)
 
@@ -58,14 +58,14 @@ Setting 'val="Default"
 
 ## Adding own checks
 
-It is possible to add own checks. All check functions should have a name starting with "check" and use values available in iamCheck, which
-are current x (the provided data to be tested as quitte object), mx (the same data as magclass object), cfg (the project configuration) and val (some validation data). 
+It is possible and encouraged to add own checks. All check functions should have a name starting with "check" and use values available in iamCheck, which
+are currently x (the provided input data to be tested as quitte object), mx (the same data as magclass object), cfg (the project configuration) and val (the validation data). 
 
-The function needs to return a list of two objects: "message" which is the message which should show up at the end of the test with the place holder "%#" for the number of elements for which the test failed and "failed" which is a character vector of objects for which the test failed.
+The function needs to return a list of two objects: a character "message" which is the message showing up at the end of the test with the place holder "%#" for the number of elements for which the test failed and a character vector "failed" identifying the objects for which the test failed.
 
 By default iamCheck will only look for checks which are available within the package, but with the argument `globalenv = TRUE` it will also search the global environment for functions. 
 
-To add for instance a unit check to the it, you can write a function `checkUnits` following the rules mentioned above and run `iamCheck` with `globalenv = TRUE`: 
+To add for instance a unit check, you can write a function `checkUnits` following the rules mentioned above and run `iamCheck` with `globalenv = TRUE`:
 
 ```{r, echo=TRUE}
 library(iamc)
@@ -78,13 +78,13 @@ checkUnits <- function(x, cfg) {
               failed=failed))
 }
 
-iamCheck(example_REMIND, globalenv=TRUE)
+iamCheck(example_REMIND, cfg="example_CFG", globalenv=TRUE)
 
 # run again with modified cfg to trigger unit warning
-cfg <- iamProjectConfig("example_CFG")
-cfg$unit[cfg$variable=="Land Cover"] <- "weird_unit"
+example2 <-example_REMIND
+levels(example2$unit)[2] <- "weird_unit"
 
-iamCheck(example_REMIND, cfg=cfg, globalenv=TRUE)
+iamCheck(example2, cfg="example_CFG", globalenv=TRUE)
 
 ```
 
