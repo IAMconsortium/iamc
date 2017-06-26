@@ -24,7 +24,7 @@
 #' @examples
 #'
 #' # run check with example data
-#' iamCheck(example_REMIND, cfg="example_CFG")
+#' iamCheck(example_REMIND, cfg="CDLINKS")
 #'
 #' @export
 
