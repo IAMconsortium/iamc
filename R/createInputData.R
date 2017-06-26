@@ -1,6 +1,6 @@
 #' createInputData
 #'
-#' Takes given data and provides it in the required data format
+#' Takes given data and provides it in the required data format (magpie)
 #'
 #' @param x Input data that should be checked, provided as a file path to a reporting file,
 #' a quitte object or an object which can be converted to quitte using \code{\link[quitte]{as.quitte}}
@@ -12,9 +12,9 @@
 #' @param verbose Boolean influencing the degree of information returned by the function. \code{verbose=TRUE} returns
 #' detailed information whereas \code{verbose=FALSE} returns a summary.
 #' @param ... additional data objects which are forwarded to the check functions
-#' @return input named list with elements available for check functions
+#' @return Input named list with elements available for check functions
 #' @author Cornelia Auer
-
+#'
 #' @importFrom quitte as.quitte is.quitte
 #' @importFrom magclass as.magpie collapseNames
 

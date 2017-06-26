@@ -4,11 +4,11 @@
 #' and compares their arguments against a list of allowed arguments
 #'
 #'
-#' @param pattern Name pattern the function name should match
+#' @param pattern Name pattern the function name should match. Default is to collect functions starting with "check"
 #' @param globalenv Boolean deciding whether functions in the global environment should be considered
 #' or not.
 #' @param allowed_args Vector of allowed arguments. If a function contains an argument not listed here it will be
-#' ignored and a warning will be returned.
+#' ignored and a warning will be returned
 #' @return a character vector of function calls fulfilling all requirements
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{iamCheck}}

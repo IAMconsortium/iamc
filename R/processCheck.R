@@ -5,9 +5,9 @@
 #' Requirement for a check function is that it returns a list with 2 elements: "message" which contains the standard message
 #' that should show up for the test and "failed" which is a vector of names for which the corresponding test failed.
 #'
-#' @param check function call as character that should be run
-#' @param input named list with elements available for check functions
-#' @return list containing check results
+#' @param check Function call as character that should be run
+#' @param input Named list with elements available for check functions
+#' @return List containing check results
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{iamProjectConfig}}, \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
 #' @examples

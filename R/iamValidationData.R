@@ -4,7 +4,7 @@
 #'
 #' @param val Validation data for comparison. Either a project name (currently available: "IAMC"), a path to a
 #' file or a data frame containing the data.
-#' @return quitte object containing the validation data set
+#' @return Quitte object containing the validation data set
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
 #' @examples

@@ -4,7 +4,7 @@
 #'
 #' @param cfg Project configuration that should be used. Either a project name (currently available: "CDLINKS"), a path to a
 #' config file or a data frame specifying available variables and corresponding properties
-#' @return data frame containing avaible variables and corresponding properties
+#' @return Data frame containing avaible variables and corresponding properties
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
 #' @examples
