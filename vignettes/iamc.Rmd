@@ -31,14 +31,14 @@ This returns information about the checks performed and the problems found in th
 
 ## Introduce customized project settings
 
-Setting `cfg="example_CFG"` in the example above makes sure, that the data is analyzed based on a rule set specified in 'example_CFG'. It is possible to use other project settings instead. Another way is to load existing cfg project settings and customize it. In the following example we take the existing example_CFG config, introduce a unknown variable `Population_ERROR` by renaming `Population` (@Jan siehe Ergebnis in Vignette: dort steht 'preCheckIllegalVariables: data contains 3 non-standard variables: Population,...' Warum heißt das jetzt nicht Population_ERROR). Second example sets a new maximum value for "FE"  to 200:
+Setting `cfg="example_CFG"` in the example above makes sure, that the data is analyzed based on a rule set specified in 'example_CFG'. It is possible to use other project settings instead. Another way is to load existing cfg project settings and customize it. In the following example we take the existing example_CFG config, introduce a unknown variable `Population_OtherName` by renaming `Population`. Second example sets a new maximum value for "FE"  to 200:
 
 ```{r, echo=TRUE}
 # first example
 # load cfg
 cfg <- iamProjectConfig("example_CFG")
 # modify cfg
-cfg$variable[cfg$variable=="Population"] <- "AAAAA_Population_OtherName"
+cfg$variable[cfg$variable=="Population"] <- "Population_OtherName"
 # run check with new cfg
 iamCheck(example_REMIND, cfg=cfg)
 
@@ -51,10 +51,15 @@ cfg$max[cfg$variable=="FE"] <- 200
 iamCheck(example_REMIND, cfg=cfg)
 ```
 
-## Validate data against historical reference data
+## Validate data against historical and other reference data
 
-Setting 'val="Default"
+In addidion all data can be validated against historical and other reference data if realated data are available. A collection of global historical and other reference data are provided by the package and used as default validation data ( i.e. 'val="IAMC"). The data and reference data are plotted into one graph. As well the consitency is checked by some indicators like the absolute value, the gradient and the trend. These results are summarised in a traffic light system. The results of the validation are stored in the 'pdf=validation.pdf' if a name for the pdf is choosen.  
 
+```{r, echo=TRUE}
+# provide a name for the pdf so that the validation is run 
+iamCheck(example_REMIND, pdf="validation.pdf", cfg="example_CFG")
+
+```
 
 ## Adding own checks
 

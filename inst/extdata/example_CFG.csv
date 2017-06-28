@@ -1,5 +1,5 @@
 variable;unit;min;max;definition
 Population;million;0;;Total population
-GDP|MER;billion US$2010/yr;500;;GDP at market exchange rate
+GDP|PPP;billion US$2010/yr;500;;GDP at market exchange rate
 FE;EJ/yr;0;;total final energy consumption by all end-use sectors and all fuels, excluding transmission/distribution losses
 PE;EJ/yr;0;;total primary energy consumption (direct equivalent)
