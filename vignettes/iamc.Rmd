@@ -29,9 +29,9 @@ iamCheck(example_REMIND, cfg="example_CFG")
 
 This returns information about the checks performed and the problems found in the data. 
 
-## Introduce customized project settings
+## Customize project settings
 
-Setting `cfg="example_CFG"` in the example above makes sure, that the data is analyzed based on a rule set specified in 'example_CFG'. It is possible to use other project settings instead. Another way is to load existing cfg project settings and customize it. In the following example we take the existing example_CFG config, introduce a unknown variable `Population_OtherName` by renaming `Population`. Second example sets a new maximum value for "FE"  to 200:
+Setting `cfg="example_CFG"` in the example above makes sure that the data is analyzed based on a set of rule specified in 'example_CFG'. It is possible to use other project settings instead. Another way is to load existing cfg project settings and customize them. In the following example we take the existing example_CFG config and introduce the new variable `Population_OtherName` that is not in the data by renaming the existing variable `Population`. The second example sets a new maximum value for the variable 'FE' to 200:
 
 ```{r, echo=TRUE}
 # first example
@@ -53,7 +53,7 @@ iamCheck(example_REMIND, cfg=cfg)
 
 ## Validate data against historical and other reference data
 
-In addidion all data can be validated against historical and other reference data if realated data are available. A collection of global historical and other reference data are provided by the package and used as default validation data ( i.e. 'val="IAMC"). The data and reference data are plotted into one graph. As well the consitency is checked by some indicators like the absolute value, the gradient and the trend. These results are summarised in a traffic light system. The results of the validation are stored in the 'pdf=validation.pdf' if a name for the pdf is choosen.  
+All data can be validated against historical and other reference data if available. A collection of global historical and other reference data is provided by the package and used as default validation data (i.e. 'val="IAMC"). The data and reference data are plotted into one graph. As well the consitency is checked by some indicators like the absolute value, the gradient and the trend. These results are summarised in a traffic light system. The results of the validation are stored in the 'pdf=validation.pdf' if a name for the pdf is given by the user.  
 
 ```{r, echo=TRUE}
 # provide a name for the pdf so that the validation is run 
@@ -63,10 +63,9 @@ iamCheck(example_REMIND, pdf="validation.pdf", cfg="example_CFG")
 
 ## Adding own checks
 
-It is possible and encouraged to add own checks. All check functions should have a name starting with "check" and use values available in iamCheck, which
-are currently x (the provided input data to be tested as quitte object), mx (the same data as magclass object), cfg (the project configuration) and val (the validation data). 
+It is possible and encouraged to add own checks. All check functions should have a name starting with "check" and use only parameters available in the parameter list of iamCheck, which are currently x (the provided input data to be tested as quitte object), mx (the same data as magclass object), cfg (the project configuration) and val (the validation data). 
 
-The function needs to return a list of two objects: a character "message" which is the message showing up at the end of the test with the place holder "%#" for the number of elements for which the test failed and a character vector "failed" identifying the objects for which the test failed.
+The function needs to return a list of two objects: a character "message" which is the message showing up at the end of the test with the place holder "%#" for the number of elements for which the test failed, and secondly a character vector "failed" identifying the objects for which the test failed.
 
 By default iamCheck will only look for checks which are available within the package, but with the argument `globalenv = TRUE` it will also search the global environment for functions. 
 
@@ -93,7 +92,7 @@ iamCheck(example2, cfg="example_CFG", globalenv=TRUE)
 
 ```
 
-As soon as the new check is working it would be nice if you could add it to the package so that others could use it as well.
+As soon as the new check is working it would be nice if you could add it to the package so that others can use it as well.
 
 
 
