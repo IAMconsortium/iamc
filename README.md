@@ -40,4 +40,4 @@ In case of questions / problems please contact Jan Dietrich <dietrich@pik-potsda
 ## FAQ
 Q: Pdflatex reports an error if I want to generate my output PDF. Why? 
 A: Please check if the automatic installation of styles is allowed for pdflatex.
-If not the pdf creation process is stopped by un-installed style packages (e.g. packageXY.sty). 
+If not, the pdf creation process may have been stopped by un-installed style packages (e.g. packageXY.sty). 
