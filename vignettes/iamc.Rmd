@@ -36,7 +36,7 @@ Im Prinzip muss es nirgends mehr als Parameter übergeben werden? Sehe ich das r
 Kann die Valdata jetzt nur noch aus der sysdata kommen, oder kann man noch validation data hinterlegen?
 
 ### Pre-checks
-To also allow to check the basic structure of the data to be checked the user can also define pre-checks. These checks make sure, that the data can actually be processed without breaking the system. 
+To also allow checking the basic structure of the data the user can define pre-checks. These checks are performed on the raw data and filter it according to the pre-checks defined to make sure that the filtered data can actually be processed by the main checks without breaking the system. 
 To define your own pre-check you can add a R-script to the folder iamc/R/. Only requirement is that the name starts with "precheck" (e.g. "preCheckMyNewCheck.R""). Any R script starting with "precheck" will be automatically detected and added to the required list of checks. 
 @all -> What if pre-checks fail, will check still be processed? Should not actually. I know I asked earlier, but i cannot remember the answer. 
 (@Jan ist die Location eigentlich egal, wo die checks liegen (in unserem fall /iamc/R), weil die Funktionen eh im Environment registriert sind und damit von überall gefunden werden?)
