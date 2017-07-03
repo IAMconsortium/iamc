@@ -26,7 +26,7 @@ filterInputData <- function(input, cfg="CDLINKS", globalenv = FALSE, out = NULL 
   for(preCheck in preChecks) out <- c(out, processCheck(preCheck, input))
 
   #find and remove duplicates
-  id <- paste(x$model, x$scenario, x$region, x$variable, x$period, sep=" | ")
+  id <- paste(input$x$model, input$x$scenario, input$x$region, input$x$variable, input$x$period, sep=" | ")
   input$x <- input$x[!duplicated(id),]
 
   # reduce cfg to variables which exist in cfg
