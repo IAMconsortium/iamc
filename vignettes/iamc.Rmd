@@ -29,17 +29,12 @@ The default configuration is that of the CDLINKS convention. As will be shown be
 
 ### Validation
 All data can be validated against historical and other reference data if available. A collection of global historical and other reference data is provided by the package and used as default validation data. The results of the validation can be viewed in a output pdf, see below for more details on how to do so.  
-If you need to inspect the currently given default validation data please type str(sysdata\$validation) @all -> stimmt natürlich nicht, was müsse die leute tippen/ oder wenigstens die location geben sysdata$XY
-@all -> where should an alternative validation file be (which folder), which format.
-@all -> Validation: Im Code fliegt überall noch val="IAMC" rum, ist das jetzt in der Konfig noch sinnvoll?
-Im Prinzip muss es nirgends mehr als Parameter übergeben werden? Sehe ich das richtig?
-Kann die Valdata jetzt nur noch aus der sysdata kommen, oder kann man noch validation data hinterlegen?
+The currently given default validation data can be inspected by calling iamValidationData().
+
 
 ### Pre-checks
 To also allow checking the basic structure of the data the user can define pre-checks. These checks are performed on the raw data and filter it according to the pre-checks defined to make sure that the filtered data can actually be processed by the main checks without breaking the system.
 To define your own pre-check you can add a R-script to the folder iamc/R/. Only requirement is that the name starts with "precheck" (e.g. "preCheckMyNewCheck.R""). Any R script starting with "precheck" will be automatically detected and added to the required list of checks. 
-@all -> What if pre-checks fail, will check still be processed? Should not actually. I know I asked earlier, but i cannot remember the answer. 
-(@Jan ist die Location eigentlich egal, wo die checks liegen (in unserem fall /iamc/R), weil die Funktionen eh im Environment registriert sind und damit von überall gefunden werden?)
 
 ### Checks
 The actual checks are then used to investigate the values of the uploaded data. E.g. if values lie within a given range defined by a min and max, etc ...
