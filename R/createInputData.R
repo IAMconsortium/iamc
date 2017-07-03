@@ -32,8 +32,5 @@ createInputData <- function(x, cfg="CDLINKS", val="IAMC", verbose=TRUE, ...)
                 val     = iamValidationData(val), #, # read validation data
                 ... )                             # additional input data
 
-  # convert x to magclass format as alternative source for checks and drop unit
-  input$mx <- collapseNames(as.magpie(input$x), collapsedim = "unit")
-
   return (input)
 }

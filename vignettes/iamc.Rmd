@@ -105,18 +105,20 @@ The function needs to return a list of two objects: a character "message" which 
 
 By default iamCheck will only look for checks which are available within the package, but with the argument `globalenv = TRUE` it will also search the global environment for functions. 
 
-To add for instance a unit check, you can write a function `checkUnits` following the rules mentioned above and run `iamCheck` with `globalenv = TRUE`:
+To add for instance a 42 check which makes sure that values to do lie between 42 and 2*42, you can write a function `check42` following the rules mentioned above and run `iamCheck` with `globalenv = TRUE`:
 
 ```{r, echo=TRUE}
 library(iamc)
 
-checkUnits <- function(x, cfg) {
-  x_var_unit <- unique(paste(x$variable, x$unit, sep=" | unit: "))
-  cfg_var_unit <- unique(paste(cfg$variable, cfg$unit, sep=" | unit: "))
-  failed <- x_var_unit[!(x_var_unit %in% cfg_var_unit)]
-  return(list(message="%# variables are reported in the wrong unit",
+check42 <- function(x) {
+
+  f <- subset(x,value>42.0 & value <2*42)
+  
+  failed <- unique(paste(f$model, f$scenario, f$region, f$variable, f$period, sep=" | "))
+
+  return(list(message="%# variables are between 42 and 2*42",
               failed=failed))
-}
+} 
 
 iamCheck(example_REMIND, cfg="example_CFG", globalenv=TRUE)
 

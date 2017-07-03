@@ -25,12 +25,17 @@ filterInputData <- function(input, cfg="CDLINKS", globalenv = FALSE, out = NULL 
   preChecks <- collectFunctions("^preCheck", globalenv=globalenv, allowed_args=names(input))
   for(preCheck in preChecks) out <- c(out, processCheck(preCheck, input))
 
+  #find and remove duplicates
+  id <- paste(x$model, x$scenario, x$region, x$variable, x$period, sep=" | ")
+  input$x <- input$x[!duplicated(id),]
+
   # reduce cfg to variables which exist in cfg
   input$cfg <- input$cfg[input$cfg$variable %in% intersectVariables,]
   # reduce x to variables which exist in cfg
   input$x <- input$x[input$x$variable %in% intersectVariables,]
-  # reduce mx to variables which exist in cfg
-  input$mx <- input$mx[,,intersectVariables]
+
+  # convert x to magclass format as alternative source for checks and drop unit
+  input$mx <- collapseNames(as.magpie(input$x), collapsedim = "unit")
 
   if(dim(input$x)[1]==0) {
     input$x <- NULL
