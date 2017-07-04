@@ -15,7 +15,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 ## Purpose and Functionality
 
-The iamc R package is a collection of R tools provided by the Integrated Assessment Modeling Consortium (IAMC) for data consistency checks. It can be used to make sure that a data set is in line with rules set by a given project. This rules can be for instance a given naming convention or unit conventions for variables, but also qualitative measures such as that certain variables lie between certain bounds. Besides that the data can be compared to given validation data.
+The iamc R package is a collection of R tools provided by the Integrated Assessment Modeling Consortium (IAMC) for data consistency checks. It can be used to make sure that a data set is in line with rules set by a given project. This rules can be for instance a given naming convention or unit conventions for variables, but also qualitative measures such as that certain variables lie between certain bounds. Besides that the data can be validated to given reference data.
 
 ## Components
 Below follows a brief overview about the essential components. 
@@ -28,8 +28,8 @@ The configuration file describes the allowed structure and values for the input 
 The default configuration is that of the CDLINKS convention. As will be shown below any other configuration can be specified.  
 
 ### Validation
-All data can be validated against historical and other reference data if available. A collection of global historical and other reference data is provided by the package and used as default validation data. The results of the validation can be viewed in a output pdf, see below for more details on how to do so.  
-The currently given default validation data can be inspected by calling iamReferenceData().
+All data can be validated against historical and other reference data. A collection of global historical and other reference data is provided by the package and used as default reference data for the validation. The results of the validation can be viewed in a output pdf, see below for more details on how to do so.  
+The currently given default reference data for the validation can be inspected by calling iamReferenceData().
 
 
 ### Pre-checks
@@ -42,8 +42,7 @@ Same as for prechecks - to define your own check you can add a R-script to the f
 
 
 ### Output-PDF
-For each run of consistency checks the user can specify a pdf which summarizes the results of the checks and the validation. 
-Otherwise results are just output to the console
+For each run of consistency checks the user can specify a pdf which summarizes the results of the checks and the validation. Otherwise results are just output to the console
 
 
 ## A simple example
@@ -84,9 +83,11 @@ iamCheck(example_REMIND, cfg=cfg)
 
 ## Validate data against historical and other reference data
 
-All data can be validated against historical and other reference data. A collection of global historical and other reference data is provided by the package and used as default validation data (i.e. 'val="IAMC"). The data and reference data are plotted into one graph. As well the consitency is checked by some indicators like the absolute value, the gradient and the trend. These results are summarised in a traffic light system. Please note: The validation is *only* run, if a name for the output pdf is specified by the user, e.g. for "pdf=summary.pdf" the results of the validation are stored in this pdf (together with the results of the checks).  
+All data can be validated against historical and other reference data. A collection of global historical and other reference data is provided by the package and used as default validation data (i.e. 'val="IAMC"). 
+The currently given default reference data for the validation can be inspected by calling iamReferenceData().
+The data and reference data are plotted into one graph. As well the consitency is checked by some indicators like the absolute value, the gradient and the trend. These results are summarised in a traffic light system. Please note: The validation is *only* run, if a name for the output pdf is specified by the user, e.g. for "pdf=summary.pdf" the results of the validation are stored in this pdf (together with the results of the checks).  
 
-```{r, echo=TRUE}
+```{r, echo=TRUE, eval = FALSE}
 # provide a name for the pdf so that the validation is run and written to the pdf
 iamCheck(example_REMIND, pdf="summary.pdf", cfg="example_CFG")
 
@@ -100,7 +101,7 @@ The function needs to return a list of two objects: a character "message" which 
 
 By default iamCheck will only look for checks which are available within the package, but with the argument `globalenv = TRUE` it will also search the global environment for functions. 
 
-To add for instance a 42 check which makes sure that values to do lie between 42 and 2*42, you can write a function `check42` following the rules mentioned above and run `iamCheck` with `globalenv = TRUE`:
+To add for instance a 42 check which makes sure that values lie between 42 and 2*42, you can write a function `check42` following the rules mentioned above and run `iamCheck` with `globalenv = TRUE`:
 
 ```{r, echo=TRUE}
 library(iamc)
