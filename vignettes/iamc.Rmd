@@ -29,7 +29,7 @@ The default configuration is that of the CDLINKS convention. As will be shown be
 
 ### Validation
 All data can be validated against historical and other reference data if available. A collection of global historical and other reference data is provided by the package and used as default validation data. The results of the validation can be viewed in a output pdf, see below for more details on how to do so.  
-The currently given default validation data can be inspected by calling iamValidationData().
+The currently given default validation data can be inspected by calling iamReferenceData().
 
 
 ### Pre-checks
@@ -42,7 +42,7 @@ Same as for prechecks - to define your own check you can add a R-script to the f
 
 
 ### Output-PDF
-For each run of consistency checks the user can request a pdf which summarizes the results of the checks and the validation. 
+For each run of consistency checks the user can specify a pdf which summarizes the results of the checks and the validation. 
 Otherwise results are just output to the console
 
 
@@ -84,11 +84,11 @@ iamCheck(example_REMIND, cfg=cfg)
 
 ## Validate data against historical and other reference data
 
-All data can be validated against historical and other reference data if available. A collection of global historical and other reference data is provided by the package and used as default validation data (i.e. 'val="IAMC"). The data and reference data are plotted into one graph. As well the consitency is checked by some indicators like the absolute value, the gradient and the trend. These results are summarised in a traffic light system. The results of the validation are stored in the 'pdf=validation.pdf' if a name for the pdf is given by the user.  
+All data can be validated against historical and other reference data. A collection of global historical and other reference data is provided by the package and used as default validation data (i.e. 'val="IAMC"). The data and reference data are plotted into one graph. As well the consitency is checked by some indicators like the absolute value, the gradient and the trend. These results are summarised in a traffic light system. Please note: The validation is *only* run, if a name for the output pdf is specified by the user, e.g. for "pdf=summary.pdf" the results of the validation are stored in this pdf (together with the results of the checks).  
 
 ```{r, echo=TRUE}
-# provide a name for the pdf so that the validation is run 
-iamCheck(example_REMIND, pdf="validation.pdf", cfg="example_CFG")
+# provide a name for the pdf so that the validation is run and written to the pdf
+iamCheck(example_REMIND, pdf="summary.pdf", cfg="example_CFG")
 
 ```
 

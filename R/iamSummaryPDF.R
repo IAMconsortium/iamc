@@ -1,7 +1,7 @@
 #' iamSummaryPDF
 #'
-#' Creates a PDF summarizing check results and adding
-#' additional validation output
+#' Creates a PDF summarizing check results and adding additional results for a 
+#' comparison to reference data (e.g. matching to historical data)
 #'
 #'
 #' @param input named list with elements available for check functions
@@ -12,7 +12,7 @@
 #' @seealso \code{\link{iamCheck}}, \code{\link{iamProjectConfig}}
 #' @examples
 #' \dontrun{
-#' input <- list(x=example_REMIND, val=iamValidationData())
+#' input <- list(x=example_REMIND, val=iamReferenceData())
 #' check_results <- iamCheck(example_REMIND)
 #'
 #' iamSummaryPDF(input, check_results)

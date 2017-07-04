@@ -2,7 +2,7 @@
 
 ## Purpose and Functionality
 
-The iamc R package is a collection of R tools provided by the Integrated Assessment Modeling Consortium (IAMC) for data analysis and diagnostics. It can be used to make sure that a data set is in line with rules set by a given project. This rules can be for instance a given naming convention or unit conventions for variables, but also qualitative measures such as that certain variables lie between certain bounds. Besides that the data can be compared to given validation data.
+The iamc R package is a collection of R tools provided by the Integrated Assessment Modeling Consortium (IAMC) for data analysis and diagnostics. It can be used to make sure that a data set is in line with rules set by a given project. This rules can be for instance a given naming convention or unit conventions for variables, but also qualitative measures such as that certain variables lie between certain bounds. Besides that the data can be compared to given reference data for validation purposes.
 
 ## Installation
 

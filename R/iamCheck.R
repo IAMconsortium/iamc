@@ -11,7 +11,7 @@
 #' @param cfg Project configuration that should be used. Either a project name (currently available: "CDLINKS"), a path to a
 #' config file or a data frame specifying available variables and corresponding properties as returned by
 #' \code{\link{iamProjectConfig}()}.
-#' @param val Validation data for comparison. Either a project name (currently available: "IAMC"), a path to a mif
+#' @param val Reference data for comparison. Either a project name (currently available: "IAMC"), a path to a mif
 #' file or a quitte object containing the data.
 #' @param verbose Boolean influencing the degree of information returned by the function. \code{verbose=TRUE} returns
 #' detailed information whereas \code{verbose=FALSE} returns a summary.
