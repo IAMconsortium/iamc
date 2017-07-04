@@ -1,6 +1,6 @@
 ---
 title: "Using and adding IAMC data checks"
-author: "Jan Philipp Dietrich"
+author: "Jan Philipp Dietrich, Lavinia Baumstark, Cornelia Auer, David Klein"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -15,53 +15,41 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 ## Purpose and Functionality
 
-The iamc R package is a collection of R tools provided by the Integrated Assessment Modeling Consortium (IAMC) for data consistency checks. It can be used to make sure that a data set is in line with rules set by a given project. This rules can be for instance a given naming convention or unit conventions for variables, but also qualitative measures such as that certain variables lie between certain bounds. Besides that the data can be validated to given reference data.
+The iamc R package is a collection of R tools provided by the Integrated Assessment Modeling Consortium (IAMC) for data consistency checks. It can be used to make sure that a data set is in line with rules defined by a given project. These rules can be for instance a naming convention or unit convention for variables, but also qualitative measures such as that certain variables lie between certain bounds. Besides that the data can be validated against reference data.
 
 ## Components
-Below follows a brief overview about the essential components. 
+Below follows a brief overview about the essential components of this package. 
 
 ### Input data
-You can use your already loaded data or upload the results of your model runs in .rda format and store them in the iamc/data folder. When later we speak about input data it will be these data. 
+You can use your data already loaded to the R workspace or add the results of your model runs by storing it in .rda format in the iamc/data folder. When later we speak about input data it will be these data. 
 
 ### Configuration 
-The configuration file describes the allowed structure and values for the input data (e.g. allowed variables, units, min, max etc.). The configuration is given as .csv file and should be stored in iamc/inst/extdata. 
-The default configuration is that of the CDLINKS convention. As will be shown below any other configuration can be specified.  
-
-### Validation
-All data can be validated against historical and other reference data. A collection of global historical and other reference data is provided by the package and used as default reference data for the validation. The results of the validation can be viewed in a output pdf, see below for more details on how to do so.  
-The currently given default reference data for the validation can be inspected by calling iamReferenceData().
-
+The configuration file describes the structure and values allowed for the input data (e.g. allowed variable names, units, min, max etc.). The configuration is given as .csv file and should be stored in iamc/inst/extdata. The default configuration is that of the CDLINKS convention. As will be shown below any other configuration can be specified.
 
 ### Pre-checks
-To also allow checking the basic structure of the data the user can define pre-checks. These checks are performed on the raw data and filter it according to the pre-checks defined to make sure that the filtered data can actually be processed by the main checks without breaking the system.
-To define your own pre-check you can add a R-script to the folder iamc/R/. Only requirement is that the name starts with "precheck" (e.g. "preCheckMyNewCheck.R""). Any R script starting with "precheck" will be automatically detected and added to the required list of checks. 
+To allow for checking the basic structure of the data the user can define pre-checks. These checks are performed on the raw data and filter it according to the defined pre-checks, meaning that data that does not pass the pre-checks will be removed before continuing with the main checks. This ensures that the filtered data can actually be processed by the main checks without breaking the system. To define your own pre-check please add it as a R-script to the folder iamc/R/ using a name that starts with "precheck" (e.g. "preCheckMyNewCheck.R""). Any R script starting with "precheck" will automatically be detected and executed. 
 
 ### Checks
-The actual checks are then used to investigate the values of the uploaded data. E.g. if values lie within a given range defined by a min and max, etc ...
-Same as for prechecks - to define your own check you can add a R-script to the folder iamc/R/. Only requirement is that the name starts with "check" (e.g. "CheckMyNewCheck.R""). Any R script starting with "check" will be automatically detected and added to the required list of checks. 
+The main checks investigate the values of the uploaded data, e.g. if values lie within a given range etc ... Same as for pre-checks: to define your own check please add a R-script to the folder iamc/R/ using a name that starts with "check" (e.g. "CheckMyNewCheck.R""). Any R script starting with "check" will automatically be detected and executed. 
 
-
-### Output-PDF
-For each run of consistency checks the user can specify a pdf which summarizes the results of the checks and the validation. Otherwise results are just output to the console
-
+### Validation (in PDF file only)
+This package offers the option to validate your data against historical and other reference data. The results of the validation can (only) be viewed in a pdf file! This file summarizes the results of the pre-checks, checks, and the validation. If the user does not activate the generation of this pdf file the validation will not be performed but only the results of the pre-checks and checks will be printed on the screen. A collection of global historical and other reference data is provided by the package and used as default reference data for the validation. It can be inspected by calling iamReferenceData().
 
 ## A simple example
 
 The package comes with a small example data set `example_REMIND` supposed to be checked against a configuration 'example_CFG'. This is a strongly reduced example for demonstration purposes (to be found in the iamc/inst/extdata folder). If no configuration is explicitly assigned the default from the CDLINKS convention is taken. This file can also be found in the iamc/inst/extdata folder.
-To show the functionality of the package some mistakes have been introduced into the example data set. To see these mistakes you can feed the input data set to the check function `iamCheck`:
+To show the functionality of the package some mistakes have been introduced into the example data set. The following command detects these mistakes by triggering all pre-checks and checks that stored in "iamc/R/":
 
 ```{r, echo=TRUE}
 library(iamc)
 iamCheck(example_REMIND, cfg="example_CFG")
 ```
 
-This returns information about the checks performed and the problems found in the data. In this example the prechecks are reporting information about variables: e.g. in "preCheckIllegalVariables" we specified a test, that checks if the input data in "example_REMIND" has variables that do not occur in the configuration file "example_CFG", thus are illegal. The test "preCheckMissingVariables" indentifies all variables that are specified in the configuration-file but are not occuring in the input data. 
-The checks "checkMin" and "checkMax" test if the values of the input data correspond to the minimal and maximal values specified in the configuration files. 
+This returns information about the checks performed and the problems found in the data. In this example the pre-checks are reporting information about variables: e.g. in "preCheckIllegalVariables" we specified a test, that checks if the input data in "example_REMIND" has variables not listed in the configuration file "example_CFG", thus are illegal. The test "preCheckMissingVariables" indentifies all variables listed in the configuration-file but missing in the input data. The checks "checkMin" and "checkMax" test if the values of the input data correspond to the minimal and maximal values specified in the configuration files. 
 
+## Customizing the project settings
 
-## Customize project settings
-
-Explicitly setting `cfg="example_CFG"` in the example above makes sure that the data is analyzed based on a set of rule specified in "example_CFG.csv" and not based on the default "CDLINKS.csv". Thus, to use specific project settings you have to explicitly assign a configuration to "cfg". The file must be given in "csv" format and stored in "iamc/inst/extdata". Another way is to load existing cfg project settings and customize them. In the following example we take the existing example_CFG config and introduce the new variable `Population_OtherName` that is not in the data by renaming the existing variable `Population`. The second example sets a new maximum value for the variable 'FE' to 200:
+Explicitly setting `cfg="example_CFG"` in the example above makes sure that the data is analyzed based on a set of rules specified in "example_CFG.csv" and not based on the default "CDLINKS.csv". Thus, to use specific project settings you have to explicitly assign a configuration to "cfg". The file must be given in "csv" format and stored in "iamc/inst/extdata". Another way is to load existing cfg project settings and customize them. In the following example we take the existing example_CFG config and introduce the new variable `Population_OtherName` that is not in the data by renaming the existing variable `Population`. The second example defines a new maximum value of 200 for the variable 'FE':
 
 ```{r, echo=TRUE}
 # first example
@@ -83,9 +71,7 @@ iamCheck(example_REMIND, cfg=cfg)
 
 ## Validate data against historical and other reference data
 
-All data can be validated against historical and other reference data. A collection of global historical and other reference data is provided by the package and used as default validation data (i.e. 'val="IAMC"). 
-The currently given default reference data for the validation can be inspected by calling iamReferenceData().
-The data and reference data are plotted into one graph. As well the consitency is checked by some indicators like the absolute value, the gradient and the trend. These results are summarised in a traffic light system. Please note: The validation is *only* run, if a name for the output pdf is specified by the user, e.g. for "pdf=summary.pdf" the results of the validation are stored in this pdf (together with the results of the checks).  
+As described above you can validate your data against historical and other reference data. A collection of global historical and other reference data is provided by the package and used as default for the validation (refData="IAMC"). These reference data can be inspected by calling iamReferenceData(). Please note: The validation is *only* activated, if a name for the resulting output pdf is specified by the user, e.g. "pdf=summary.pdf". Besides the results of the pre-cheks and checks the pdf shows detailed results of the validation: it graphically compares the data and the reference data by showing time series and traffic light symbols that indicate how well your data matches the refernce data in terms of absolute values, the gradient and the trend.
 
 ```{r, echo=TRUE, eval = FALSE}
 # provide a name for the pdf so that the validation is run and written to the pdf
@@ -95,11 +81,18 @@ iamCheck(example_REMIND, pdf="summary.pdf", cfg="example_CFG")
 
 ## Adding own checks
 
-It is possible and encouraged to add own checks. All check functions should have a name starting with "check" or "precheck". Like this they will be automatically detected and added to the list of checks. The checks may only use parameters available in the parameter list of iamCheck, which are currently x (the provided input data to be tested as quitte object), mx (the same data as magclass object), cfg (the project configuration) and val (the validation data). 
+It is possible and encouraged to add own checks. All check functions must have a names starting with "check" or "precheck" to be automatically detected and executed. The checks may only use parameters available in the parameter list of iamCheck, which are currently
 
-The function needs to return a list of two objects: a character "message" which is the message showing up at the end of the test with the place holder "%#" for the number of elements for which the test failed, and secondly a character vector "failed" identifying the objects (e.g. their names as character) for which the test failed.
+* x (the provided input data to be tested as quitte object) or mx (the same data as magclass object)
+* cfg (the project configuration) and
+* refData (the reference data, by default "IAMC"). 
 
-By default iamCheck will only look for checks which are available within the package, but with the argument `globalenv = TRUE` it will also search the global environment for functions. 
+Your check function needs to return a list of two objects: 
+
+* a character "message" which is the message showing up at the end of the test with the place holder "%#" for the number of elements for which the test failed, and 
+* a character vector "failed" identifying the objects (e.g. variable names as character) for which the test failed.
+
+By default iamCheck will only look for checks which are part of the package, but with the argument `globalenv = TRUE` it will also search the global environment for functions. 
 
 To add for instance a 42 check which makes sure that values lie between 42 and 2*42, you can write a function `check42` following the rules mentioned above and run `iamCheck` with `globalenv = TRUE`:
 
@@ -107,8 +100,11 @@ To add for instance a 42 check which makes sure that values lie between 42 and 2
 library(iamc)
 
 check42 <- function(x) {
+  # perform the check
   f <- subset(x,value>42.0 & value <2*42)
+  # generate character vector of objects that fail the check
   failed <- unique(paste(f$model, f$scenario, f$region, f$variable, f$period, sep=" | "))
+  # return the message and the character vector
   return(list(message="%# variables are between 42 and 2*42",
               failed=failed))
 } 
@@ -124,6 +120,3 @@ iamCheck(example2, cfg="example_CFG", globalenv=TRUE)
 ```
 
 As soon as the new check is working it would be nice if you could add it to the package so that others can use it as well.
-
-
-
