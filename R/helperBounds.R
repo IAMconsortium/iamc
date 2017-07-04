@@ -9,7 +9,7 @@ helperBounds <- function(mx, cfg, type) {
   }
   check[is.na(check)] <- TRUE
   check <- as.quitte(check)
-  failed <- check[!check$value,]
-  failed <- unique(paste(failed$variable, failed$model, failed$scenario,sep=" | "))
+  f <- check[!check$value,]
+  failed <- unique(paste(f$model, f$scenario, f$region, f$variable, f$period, sep=" | "))
   return(failed)
 }
