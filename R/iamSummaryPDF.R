@@ -1,6 +1,6 @@
 #' iamSummaryPDF
 #'
-#' Creates a PDF summarizing check results and adding additional results for a 
+#' Creates a PDF summarizing check results and adding additional results for a
 #' comparison to reference data (e.g. matching to historical data)
 #'
 #'
@@ -12,7 +12,7 @@
 #' @seealso \code{\link{iamCheck}}, \code{\link{iamProjectConfig}}
 #' @examples
 #' \dontrun{
-#' input <- list(x=example_REMIND, val=iamReferenceData())
+#' input <- list(x=example_REMIND, ref=iamReferenceData())
 #' check_results <- iamCheck(example_REMIND)
 #'
 #' iamSummaryPDF(input, check_results)
@@ -80,6 +80,6 @@ iamSummaryPDF <- function(input, check_results=NULL, file="summary.pdf", ...) {
 
   swlatex(sw,"\\clearpage")
 
-  if(!is.null(input$val) & !is.null(input$x)) validationpdf(x=input$x, hist=input$val, file = sw, prefix = "Validation - ")
+  if(!is.null(input$ref) & !is.null(input$x)) validationpdf(x=input$x, hist=input$ref, file = sw, prefix = "Validation - ")
 
 }

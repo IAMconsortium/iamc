@@ -21,8 +21,8 @@ iamReferenceData <- function(ref="IAMC") {
       warning("ref has length > 1 and only the first element will be used")
     }
     if(!grepl(".",ref,fixed=TRUE)) {
-      if(!(tolower(ref) %in% names(valdata))) stop("Unknown refidation source ", ref,"!")
-      ref <- valdata[[tolower(ref)]]
+      if(!(tolower(ref) %in% names(referenceData))) stop("Unknown refidation source ", ref,"!")
+      ref <- referenceData[[tolower(ref)]]
     } else if(!file.exists(ref)) {
       stop("Given reference setting is neither a project for which a data set exists nor an existing reference file!")
     }

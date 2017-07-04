@@ -11,7 +11,7 @@
 #' @param cfg Project configuration that should be used. Either a project name (currently available: "CDLINKS"), a path to a
 #' config file or a data frame specifying available variables and corresponding properties as returned by
 #' \code{\link{iamProjectConfig}()}.
-#' @param val Reference data for comparison. Either a project name (currently available: "IAMC"), a path to a mif
+#' @param refData Reference data for comparison. Either a project name (currently available: "IAMC"), a path to a mif
 #' file or a quitte object containing the data.
 #' @param verbose Boolean influencing the degree of information returned by the function. \code{verbose=TRUE} returns
 #' detailed information whereas \code{verbose=FALSE} returns a summary.
@@ -28,7 +28,7 @@
 #'
 #' @export
 
-iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=FALSE, globalenv=FALSE, ...) {
+iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", refData="IAMC", verbose=FALSE, globalenv=FALSE, ...) {
 
 
   if(missing(x)) stop("x needs to be provided!")
@@ -38,7 +38,7 @@ iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", val="IAMC", verbose=FALSE, glob
   out   <- NULL
 
   # create input data -----------------------------------
-  input <- createInputData(x, cfg, val, verbose, ...)
+  input <- createInputData(x, cfg, refData, verbose, ...)
 
   # filter input data -----------------------------------
   resultFiltering <- filterInputData(input, cfg, globalenv, out)
