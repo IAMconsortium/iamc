@@ -1,4 +1,4 @@
-checkMin <- function(mx, cfg) {
+checkMin <- function(x, cfg) {
   return(list(message="%# values lie below allowed minimum",
-              failed=helperBounds(mx, cfg, "min")))
+              failed=helperBounds(x, cfg, "min")))
 }

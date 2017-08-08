@@ -19,7 +19,7 @@
 #' @importFrom methods formalArgs
 #' @export
 
-collectFunctions <- function(pattern="^check", globalenv=FALSE, allowed_args=c("x","mx","cfg")) {
+collectFunctions <- function(pattern="^check", globalenv=FALSE, allowed_args=c("x","cfg")) {
 
   funcs <- paste0("iamc:::",ls(getNamespace("iamc"), pattern=pattern))
   if(globalenv) {

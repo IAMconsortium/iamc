@@ -83,7 +83,7 @@ iamCheck(example_REMIND, pdf="summary.pdf", cfg="example_CFG")
 
 It is possible and encouraged to add own checks. All check functions must have a names starting with "check" or "precheck" to be automatically detected and executed. The checks may only use parameters available in the parameter list of iamCheck, which are currently
 
-* x (the provided input data to be tested as quitte object) or mx (the same data as magclass object)
+* x (the provided input data to be tested as quitte object)
 * cfg (the project configuration) and
 * refData (the reference data, by default "IAMC"). 
 

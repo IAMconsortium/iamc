@@ -1,15 +1,14 @@
-helperBounds <- function(mx, cfg, type) {
-  ref <- as.magpie(cfg[,c("variable",type)],datacol=2)
+helperBounds <- function(x, cfg, type) {
+  x$ref <- cfg[[type]][x$variable]
   if(type=="min") {
-    check <- mx>=ref
+    x$check <- (x$value>=x$ref)
   } else if(type=="max") {
-    check <- mx<=ref
+    x$check <- (x$value<=x$ref)
   } else {
     stop("Unknown type ",type)
   }
-  check[is.na(check)] <- TRUE
-  check <- as.quitte(check)
-  f <- check[!check$value,]
+  x$check[is.na(x$check)] <- TRUE
+  f <- x[!x$check,]
   failed <- unique(paste(f$model, f$scenario, f$region, f$variable, f$period, sep=" | "))
   return(failed)
 }
