@@ -22,7 +22,7 @@ createInputData <- function(x, cfg="CDLINKS", ref="IAMC", verbose=TRUE, ...)
 {
 
   # test whether x could be converted to quitte object
-  xQitte <- try(as.quitte(x))
+  xQitte <- try(as.quitte(x, na.rm=TRUE))
   if(is(xQitte,"try-error")) stop("Incompatible data input format. Data could not be converted to quitte object!")
 
   #building input data object

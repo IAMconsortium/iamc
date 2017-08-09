@@ -1,7 +1,7 @@
 Package: iamc
 Type: Package
 Title: IAMC Tools
-Version: 0.16.0
+Version: 0.17.0
 Authors@R: c(person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de", role = c("aut","cre")),
              person("Lavinia", "Baumstark", email = "lavinia@pik-potsdam.de", role = "aut"),
              person("Cornelia", "Auer", email = "cornelia.auer@pik-potsdam.de", role = "aut"))
@@ -9,7 +9,7 @@ Description: A collection of R tools provided by the Integrated Assessment Model
 License: MIT + file LICENSE
 Depends:
     R(>= 2.10.0)
-Imports: quitte,
+Imports: quitte(>= 0.3066),
          magclass(>= 4.40.0),
          mip,
          lusweave,
