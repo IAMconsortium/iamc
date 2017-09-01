@@ -41,3 +41,8 @@ In case of questions / problems please contact Jan Dietrich <dietrich@pik-potsda
 Q: Pdflatex reports an error if I want to generate my output PDF. Why? 
 A: Please check if the automatic installation of styles is allowed for pdflatex.
 If not, the pdf creation process may have been stopped by un-installed style packages (e.g. packageXY.sty). 
+
+Q: I can't build my vignette. Calling 'vignette("iamc")' gives me nothing. Why?
+A: You can try a workaround in RStudio: open iamc/vignettes/iamc.Rmd . 
+Then you can 'knit' the vignette locally by hitting the 'knit' button in the local menu of the opened document. 
+We are on it, it is a bug.
