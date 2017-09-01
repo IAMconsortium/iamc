@@ -58,8 +58,8 @@ codedAsInteger<-function(input)
 preCheckDuplicates <- function(x)
 {
 
-  if (!is.quitte(x))
-    stop("Data not provided in the right format: quitte format required.")
+  #if (!is.quitte(x))
+  #  stop("Data not provided in the right format: quitte format required.")
 
   id <- 0
   exponent <- 0
@@ -78,7 +78,7 @@ preCheckDuplicates <- function(x)
 
   id <- id + (codedAsInteger(x$period)*(10^exponent))
 
-  return(list(message="data contains %# duplicate entries.",
+  return(list(message="your data contains %# duplicate entries.",
               failed=id[duplicated(id)]))
 
 }

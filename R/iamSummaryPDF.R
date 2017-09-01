@@ -23,7 +23,7 @@
 
 
 
-iamSummaryPDF <- function(input, check_results=NULL, file="summary.pdf", ...) {
+iamSummaryPDF <- function(input, check_results=NULL, file="summary.pdf", maxLinesOutput= 15, ...) {
 
   template <-  c("\\documentclass[a4paper, portrait ]{article}",
                  "\\setlength{\\parindent}{0in}",
@@ -74,7 +74,14 @@ iamSummaryPDF <- function(input, check_results=NULL, file="summary.pdf", ...) {
       nfailed <- length(check_results[[chk]]$failed)
       swlatex(sw,paste0("\\subsection{",chk," (",nfailed, " Warnings)}"))
       swlatex(sw,paste0(sub("%#",nfailed,check_results[[chk]]$message)))
-      swR(sw,cat,paste(check_results[[chk]]$failed,collapse="\n"))
+      out <- check_results[[chk]]$failed
+      if (nfailed > maxLinesOutput)
+      {
+        out <- check_results[[chk]]$failed[1:15]
+        swlatex(sw,"\n output reduced to the first 15 examples: \n")
+      }
+      swR(sw,cat,paste(out,collapse="\n"))
+
     }
   }
 
