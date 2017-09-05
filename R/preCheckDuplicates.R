@@ -61,24 +61,28 @@ preCheckDuplicates <- function(x)
   #if (!is.quitte(x))
   #  stop("Data not provided in the right format: quitte format required.")
 
-  id <- 0
+  encodedID <- 0
   exponent <- 0
 
-  id <- codedAsInteger(x$model)
+  encodedID <- codedAsInteger(x$model)
   exponent <- getShiftFactor(nlevels(factor(x$model)))
 
-  id <- id + codedAsInteger(x$scenario)*10^exponent
+  encodedID <- encodedID + codedAsInteger(x$scenario)*10^exponent
   exponent <- exponent + getShiftFactor(nlevels(factor(x$scenario)))
 
-  id <- id + codedAsInteger(x$region)*10^exponent
+  encodedID <- encodedID + codedAsInteger(x$region)*10^exponent
   exponent <- exponent + getShiftFactor(nlevels(factor(x$region)))
 
-  id <- id + codedAsInteger(x$variable)*10^exponent
+  encodedID <- encodedID + codedAsInteger(x$variable)*10^exponent
   exponent <- exponent + getShiftFactor(nlevels(factor(x$variable)))
 
-  id <- id + (codedAsInteger(x$period)*(10^exponent))
+  encodedID <- encodedID + (codedAsInteger(x$period)*(10^exponent))
+
+  duplicates <- x[duplicated(encodedID),]
+  returnVal <- paste(duplicates$model, duplicates$scenario, duplicates$region, duplicates$variable, duplicates$period, sep=" | ")
+
 
   return(list(message="your data contains %# duplicate entries.",
-              failed=id[duplicated(id)]))
+              failed= returnVal))
 
 }
