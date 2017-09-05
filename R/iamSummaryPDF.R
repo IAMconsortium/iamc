@@ -7,6 +7,7 @@
 #' @param input named list with elements available for check functions
 #' @param check_results list with check results as returned by \code{\link{iamCheck}}
 #' @param file File name the summary should be written to.
+#' @param maxLinesOutput maximum number of lines that should be output in the pdf
 #' @param ... additional arguments sent to \code{\link[lusweave]{swclose}}
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{iamCheck}}, \code{\link{iamProjectConfig}}
