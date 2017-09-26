@@ -23,7 +23,7 @@ getShiftFactor<-function(positiveNumber)
     curPowerOfTen <- curPowerOfTen + 1
   }
 
-  stop("function 'powerOfTen' terminated in an unexpected way")
+  stop("function 'getShiftFactor' terminated in an unexpected way")
 
 }
 
