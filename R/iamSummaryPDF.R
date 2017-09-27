@@ -24,7 +24,7 @@
 
 
 
-iamSummaryPDF <- function(input, check_results=NULL, file="summary.pdf", maxLinesOutput= 15, ...) {
+iamSummaryPDF <- function(input, check_results=NULL, file="summary.pdf", maxLinesOutput= 200, ...) {
 
   template <-  c("\\documentclass[a4paper, portrait ]{article}",
                  "\\setlength{\\parindent}{0in}",
@@ -78,8 +78,9 @@ iamSummaryPDF <- function(input, check_results=NULL, file="summary.pdf", maxLine
       out <- check_results[[chk]]$failed
       if (nfailed > maxLinesOutput)
       {
-        out <- check_results[[chk]]$failed[1:15]
-        swlatex(sw,"\n output reduced to the first 15 examples: \n")
+        out <- check_results[[chk]]$failed[1:maxLinesOutput]
+        swlatex(sw,paste0("\n output reduced to the first ", maxLinesOutput, " examples:\n"))
+       # swlatex(sw,"\n output reduced to the first 15 examples: \n")
       }
       swR(sw,cat,paste(out,collapse="\n"))
 
