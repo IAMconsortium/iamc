@@ -89,6 +89,6 @@ iamSummaryPDF <- function(input, check_results=NULL, file="summary.pdf", maxLine
 
   swlatex(sw,"\\clearpage")
 
-  if(!is.null(input$ref) & !is.null(input$x)) validationpdf(x=input$x, hist=input$ref, file = sw, prefix = "Validation - ")
+  if(!is.null(input$ref) & !is.null(input$x)) validationpdf(x=input$x, hist=input$ref, file = sw, prefix = "Validation - ", hideEmptySection = TRUE)
 
 }
