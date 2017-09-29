@@ -1,7 +1,7 @@
 Package: iamc
 Type: Package
 Title: IAMC Tools
-Version: 0.21.0
+Version: 0.21.1
 Authors@R: c(person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de", role = c("aut","cre")),
              person("Lavinia", "Baumstark", email = "lavinia@pik-potsdam.de", role = "aut"),
              person("Cornelia", "Auer", email = "cornelia.auer@pik-potsdam.de", role = "aut"))
@@ -10,8 +10,8 @@ License: MIT + file LICENSE
 Depends:
     R(>= 2.10.0)
 Imports: quitte(>= 0.3066),
-         magclass(>= 4.40.0),
-         mip,
+         magclass(>= 4.40),
+         mip(>= 0.97),
          lusweave,
          dplyr,
          utils,
