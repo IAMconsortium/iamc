@@ -16,7 +16,7 @@
 #' input <- list(x=example_REMIND, ref=iamReferenceData())
 #' check_results <- iamCheck(example_REMIND)
 #'
-#' iamSummaryPDF(input, check_results)
+#' iamSummaryPDF(check_results$input, check_results$out)
 #' }
 #' @importFrom lusweave swopen swlatex swclose swtable swR
 #' @importFrom mip validationpdf
