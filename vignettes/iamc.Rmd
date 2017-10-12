@@ -21,7 +21,7 @@ The iamc R package is a collection of R tools provided by the Integrated Assessm
 Below follows a brief overview about the essential components of this package. 
 
 ### Input data
-You can use your data already loaded to the R workspace or add the results of your model runs by storing it in .rda format in the iamc/data folder. When later we speak about input data it will be these data.
+Input data that should be checked can be provided as a file path to a reporting file,a quitte object or an object which can be converted to quitte using `as.quitte`.
 
 ### Configuration 
 The above-mentioned set of rules are defined in the configuration file. It describes the structure and values allowed for the input data (e.g. allowed variable names, units, min, max etc.). The configuration is given as .csv file and should be stored in iamc/inst/extdata. The default configuration is that of the CDLINKS convention. As will be shown below any other configuration can be specified.
@@ -37,15 +37,17 @@ This package offers the option to validate your data against historical and othe
 
 ## A simple example
 
-The package comes with a small example data set `example_REMIND` supposed to be checked against a configuration 'example_CFG'. This is a strongly reduced example for demonstration purposes (to be found in the iamc/inst/extdata folder). If no configuration is explicitly assigned the default from the CDLINKS convention is taken. This file can also be found in the iamc/inst/extdata folder.
+The package comes with a small example data set `example_REMIND` supposed to be checked against a configuration 'example_CFG'. This is a strongly reduced example for demonstration purposes. If no configuration is explicitly assigned the default CDLINKS convention is taken. This file can be found in the iamc/inst/extdata folder of the package.
 To show the functionality of the package some mistakes have been introduced into the example data set. The following command detects these mistakes by triggering all pre-checks and checks that are stored in "iamc/R/":
 
 ```{r, echo=TRUE}
 library(iamc)
-iamCheck(example_REMIND, cfg="example_CFG")
+out <- iamCheck(example_REMIND, cfg="example_CFG")
 ```
 
 This returns information about the checks performed and the problems found in the data. In this example the pre-checks are reporting information about variables: e.g. in "preCheckIllegalVariables" we specified a test, that checks if the input data in "example_REMIND" has variables not listed in the configuration file "example_CFG", thus are illegal. The test "preCheckMissingVariables" indentifies all variables listed in the configuration-file but missing in the input data. The checks "checkMin" and "checkMax" test if the values of the input data correspond to the minimal and maximal values specified in the configuration files. 
+
+Information about the tests is written to standard output, but also invisibly returned by the function. That means, if you want to further process the products of `iamCheck` you can store its return value in a variable and further work with that.
 
 ## Customizing the project settings
 

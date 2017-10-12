@@ -12,7 +12,7 @@
 #' @seealso \code{\link{iamProjectConfig}}, \code{\link[quitte]{as.quitte}}, \code{\link[quitte]{is.quitte}}
 #' @examples
 #'
-#' out <- processCheck(check = "filterVariables(x, cfg)",
+#' out <- processCheck(check = "checkMin(x, cfg)",
 #'                   input = list(x=example_REMIND, cfg=iamProjectConfig()))
 #' @importFrom methods is
 #' @export
