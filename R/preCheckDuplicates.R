@@ -82,7 +82,7 @@ preCheckDuplicates <- function(x)
   returnVal <- paste(duplicates$model, duplicates$scenario, duplicates$region, duplicates$variable, duplicates$period, sep=" | ")
 
 
-  return(list(message="your data contains %# duplicate entries. Only the first occurrences will be considered.",
+  return(list(message="data contains %# duplicate entries. Skip recurring entries.",
               failed= returnVal))
 
 }
