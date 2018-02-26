@@ -1,8 +1,8 @@
 Package: iamc
 Type: Package
 Title: IAMC Tools
-Version: 0.23.0
-Date: 2018-02-16
+Version: 0.24.0
+Date: 2018-02-26
 Authors@R: c(person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de", role = c("aut","cre")),
              person("Lavinia", "Baumstark", email = "lavinia@pik-potsdam.de", role = "aut"),
              person("Cornelia", "Auer", email = "cornelia.auer@pik-potsdam.de", role = "aut"))
@@ -23,4 +23,4 @@ RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
-ValidationKey: 4042940
+ValidationKey: 4221120

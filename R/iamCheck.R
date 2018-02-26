@@ -17,6 +17,7 @@
 #' detailed information whereas \code{verbose=FALSE} returns a summary.
 #' @param globalenv Boolean deciding whether functions in the global environment should be considered
 #' or not.
+#' @param pdfStyle list of style-options for the pdf
 #' @param ... additional data objects which are forwarded to the check functions
 #' @return List of all inputs and outputs created by the performed checks (invisible)
 #' @author Jan Philipp Dietrich
@@ -28,7 +29,7 @@
 #'
 #' @export
 
-iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", refData="IAMC", verbose=FALSE, globalenv=FALSE, ...) {
+iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", refData="IAMC", verbose=FALSE, globalenv=FALSE, pdfStyle=NULL, ...) {
 
 
   if(missing(x)) stop("x needs to be provided!")
@@ -54,7 +55,7 @@ iamCheck <- function(x, pdf=NULL, cfg="CDLINKS", refData="IAMC", verbose=FALSE, 
   }
 
   # write output pdf ------------------------------------
-  if(!is.null(pdf)) iamSummaryPDF(input = input, check_results = out, file = pdf)
+  if(!is.null(pdf)) iamSummaryPDF(input = input, check_results = out, file = pdf, pdfStyle = pdfStyle)
 
   # return check results --------------------------------
   invisible(list(out=out, input=input))
