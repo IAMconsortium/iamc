@@ -41,6 +41,8 @@
 #' @importFrom magclass dimSums fulldim getCells getNames<- getSets getSets<- getYears
 #' is.magpie mbind new.magpie read.report setNames write.report2 getNames
 #' @importFrom reshape2 melt
+#' @importFrom readxl read_excel
+#' @importFrom writexl write_xlsx
 #' @export
 
 write.reportProject <- function(mif,mapping,file=NULL,max_file_size=NULL,format="default",append=FALSE,...){
@@ -181,12 +183,12 @@ write.reportProject <- function(mif,mapping,file=NULL,max_file_size=NULL,format=
         }
         a <- write.report2(new_data,file=NULL,...)
         a <- do.call(rbind,do.call(rbind,a))
-        if(append) {#write.xlsx2 does not support append, therefore this workaround
-          existing.data <- xlsx::read.xlsx2(file, sheetName = "DATA",colClasses=NA,check.names=FALSE)
+        if(append) {
+          existing.data <- read_excel(file, sheet = "DATA")
           new.data <- rbind(existing.data, as.data.frame(a))
-          xlsx::write.xlsx2(new.data, file = file, row.names = F,sheetName = "DATA")
+          write_xlsx(list(DATA = new.data), path = file)
         } else {
-          xlsx::write.xlsx2(as.data.frame(a), file = file, row.names = F,sheetName = "DATA")
+          write_xlsx(list(DATA = as.data.frame(a)), path = file)
         }
 
       } else
