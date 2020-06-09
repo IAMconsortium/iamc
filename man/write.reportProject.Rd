@@ -11,6 +11,7 @@ write.reportProject(
   max_file_size = NULL,
   format = "default",
   append = FALSE,
+  missing_log = NULL,
   ...
 )
 }
@@ -41,6 +42,8 @@ Unit is a name of the unit without ()
 \item{format}{available reporting formats: "default", "IAMC" and "AgMIP". "default" and "IAMC" are very similar (wide format for year) and differ only in the use of semi-colon (default) and comma (IAMC) as seperator. "AgMIP" is in long format.}
 
 \item{append}{Logical which decides whether data should be added to an existing file or an existing file should be overwritten}
+
+\item{missing_log}{name of logfile to record variables which are present in the mapping but missing in the mif file. By default, no logfile is produced}
 
 \item{...}{arguments passed to write.report and write.report2}
 }
