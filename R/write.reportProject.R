@@ -28,6 +28,7 @@
 #' @param max_file_size maximum file size in MB; if size of file exceeds max_file_size reporting is split into multiple files
 #' @param format available reporting formats: "default", "IAMC" and "AgMIP". "default" and "IAMC" are very similar (wide format for year) and differ only in the use of semi-colon (default) and comma (IAMC) as seperator. "AgMIP" is in long format.
 #' @param append Logical which decides whether data should be added to an existing file or an existing file should be overwritten
+#' @param missing_log name of logfile to record variables which are present in the mapping but missing in the mif file. By default, no logfile is produced
 #' @param ... arguments passed to write.report and write.report2
 #' @author Christoph Bertram, Lavinia Baumstark, Anastasis Giannousakis, Florian Humpenoeder
 #' @seealso \code{\link{write.report}}
@@ -45,7 +46,9 @@
 #' @importFrom writexl write_xlsx
 #' @export
 
-write.reportProject <- function(mif,mapping,file=NULL,max_file_size=NULL,format="default",append=FALSE,...){
+write.reportProject <- function(mif, mapping,
+                                file=NULL, max_file_size=NULL,
+                                format="default", append=FALSE, missing_log=NULL, ...){
   if(is.character(mif)){
     data <- read.report(mif,as.list=TRUE)
   } else if (is.list(mif)){
@@ -170,7 +173,15 @@ write.reportProject <- function(mif,mapping,file=NULL,max_file_size=NULL,format=
     }
   }
 
-  if (length(missingc) !=0) warning(paste0("Following variables were not found in the generic data and were excluded: \"",paste(unique(missingc),collapse = "\", \""),"\""))
+  if (length(missingc) !=0){
+    warning(
+      paste0(
+        "Following variables were not found in the generic data and were excluded: \"",
+        paste(unique(missingc), collapse = "\", \""),"\""))
+    if (!is.null(missing_log)){
+      write(c(sprintf("#--- Variables missing in %s ---#", mif), missingc, "\n"), missing_log, append=TRUE)
+    }
+  }
 
   if(!is.null(file)){
     # save project reporting
