@@ -174,11 +174,12 @@ write.reportProject <- function(mif, mapping,
   }
 
   if (length(missingc) !=0){
-    warning(
-      paste0(
-        "Following variables were not found in the generic data and were excluded: \"",
-        paste(unique(missingc), collapse = "\", \""),"\""))
-    if (!is.null(missing_log)){
+    if (is.null(missing_log)){
+      warning(
+        paste0(
+          "Following variables were not found in the generic data and were excluded: \"",
+          paste(unique(missingc), collapse = "\", \""),"\""))
+    }else{
       write(c(sprintf("#--- Variables missing in %s ---#", mif), missingc, "\n"), missing_log, append=TRUE)
     }
   }
