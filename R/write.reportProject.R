@@ -156,7 +156,9 @@ write.reportProject <- function(mif, mapping,
               stop(paste0("mixture of weights between NULL and parameters for indicator "),ind_x)
               #wenn Gewicht mischung aus NULL und "" dann error
             }
-          } else warning(paste0("Indicator ", original_x[which(!original_x%in%getNames(data[[n]][[m]]))]," missing in data but exists in mapping"))
+          } else if (is.null(missing_log)){
+            warning(paste0("Indicator ", original_x[which(!original_x%in%getNames(data[[n]][[m]]))]," missing in data but exists in mapping"))
+          }
         }
 
         getSets(tmp)<-c(getSets(tmp)[1:3],strsplit(names(map)[2],"[.]")[[1]][-1])
