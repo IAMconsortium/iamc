@@ -1,19 +1,24 @@
-# R IAMC package
+# IAMC Tools
+
+R package **iamc**, version **0.28.0**
+
+  
 
 ## Purpose and Functionality
 
-The iamc R package is a collection of R tools provided by the Integrated Assessment Modeling Consortium (IAMC) for data analysis and diagnostics. It can be used to make sure that a data set is in line with rules set by a given project. This rules can be for instance a given naming convention or unit conventions for variables, but also qualitative measures such as that certain variables lie between certain bounds. Besides that the data can be compared to given reference data for validation purposes.
+A collection of R tools provided by the Integrated Assessment Modeling Consortium (IAMC) for data analysis and diagnostics. 
+
 
 ## Installation
 
-For installation an additional repository has to be added in R:
+For installation of the most recent package version an additional repository has to be added in R:
 
 ```r
-options(repos = c(CRAN = "@CRAN@", rd3mod_repo = "http://www.pik-potsdam.de/rd3mod/R/"))
+options(repos = c(CRAN = "@CRAN@", pik = "https://rse.pik-potsdam.de/r/packages"))
 ```
-The additional repository can be made availably permanently by adding the line above to a file called `.Rprofile` stored in the home folder of your system (`Sys.glob("~")` in R returns the home directory).
+The additional repository can be made available permanently by adding the line above to a file called `.Rprofile` stored in the home folder of your system (`Sys.glob("~")` in R returns the home directory).
 
-After that the package can be installed using `install.packages`:
+After that the most recent version of the package can be installed using `install.packages`:
 
 ```r 
 install.packages("iamc")
@@ -29,20 +34,29 @@ update.packages()
 
 The package comes with a vignette describing the basic functionality of the package and how to use it. You can load it with the following command (the package needs to be installed):
 
-```r 
-vignette("iamc")
+```r
+vignette("iamc") # Using and adding IAMC data checks
 ```
 
 ## Questions / Problems
 
-In case of questions / problems please contact Jan Dietrich <dietrich@pik-potsdam.de> or take a look at the short FAQ below
+In case of questions / problems please contact Jan Philipp Dietrich <dietrich@pik-potsdam.de>.
 
-## FAQ
-Q: Pdflatex reports an error if I want to generate my output PDF. Why? 
-A: Please check if the automatic installation of styles is allowed for pdflatex.
-If not, the pdf creation process may have been stopped by un-installed style packages (e.g. packageXY.sty). 
+## Citation
 
-Q: I can't build my vignette. Calling 'vignette("iamc")' gives me nothing. Why?
-A: You can try a workaround in RStudio: open iamc/vignettes/iamc.Rmd . 
-Then you can 'knit' the vignette locally by hitting the 'knit' button in the local menu of the opened document. 
-We are on it, it is a bug.
+To cite package **iamc** in publications use:
+
+Dietrich J, Baumstark L, Auer C (2020). _iamc: IAMC Tools_. R package version
+0.28.0.
+
+A BibTeX entry for LaTeX users is
+
+ ```latex
+@Manual{,
+  title = {iamc: IAMC Tools},
+  author = {Jan Philipp Dietrich and Lavinia Baumstark and Cornelia Auer},
+  year = {2020},
+  note = {R package version 0.28.0},
+}
+```
+

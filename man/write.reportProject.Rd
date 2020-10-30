@@ -23,13 +23,15 @@ a report.mif}
 naming. The format of the mapping should be: 1st column the standard naming in PIK mif format.
 X further columns that contain the indicator names in the reporting format. Can also contain
 several indicator columns (e.g Variable and Item).
-Optional columns with reserved names are unit, weight, and factor.
-Factor is a number that the results will be multplied with (e.g. to transform CO2 into C).
+Optional columns with reserved names are unit, weight, factor and private.
+Factor is a number that the results will be multiplied with (e.g. to transform CO2 into C).
 Weight is needed if several mif indicators shall be aggregated to one reporting indicator.
 You always need a weight column if you have multiple mif to one reporting mappings. If you have
 a weight column, you have to have values in it for all indicators. If NULL, the results are
 added up; if you provide an indicator name (of a mif indicator), this indicator will be used for
 the weighting of a weighted mean.
+Private should be set to value 1 for mif indicators that shall not be reported (only entries with 0 or empty are mapped to a reporting indicator).
+In the case of aggregation, contradicting entries in private column for the same reporting indicator will throw an error.
 Unit is a name of the unit without ()
   Example:
 "magpie";"agmip";"item";"unit";"weight";"factor"
@@ -64,5 +66,5 @@ write.reportProject("REMIND_generic_test.mif","Mapping_generic_ADVANCE.csv")
 \code{\link{write.report}}
 }
 \author{
-Christoph Bertram, Lavinia Baumstark, Anastasis Giannousakis, Florian Humpenoeder
+Christoph Bertram, Lavinia Baumstark, Anastasis Giannousakis, Florian Humpenoeder, Falk Benke
 }

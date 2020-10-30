@@ -12,13 +12,15 @@
 #' naming. The format of the mapping should be: 1st column the standard naming in PIK mif format.
 #' X further columns that contain the indicator names in the reporting format. Can also contain
 #' several indicator columns (e.g Variable and Item).
-#' Optional columns with reserved names are unit, weight, and factor.
-#' Factor is a number that the results will be multplied with (e.g. to transform CO2 into C).
+#' Optional columns with reserved names are unit, weight, factor and private.
+#' Factor is a number that the results will be multiplied with (e.g. to transform CO2 into C).
 #' Weight is needed if several mif indicators shall be aggregated to one reporting indicator.
 #' You always need a weight column if you have multiple mif to one reporting mappings. If you have
 #' a weight column, you have to have values in it for all indicators. If NULL, the results are
 #' added up; if you provide an indicator name (of a mif indicator), this indicator will be used for
 #' the weighting of a weighted mean.
+#' Private should be set to value 1 for mif indicators that shall not be reported (only entries with 0 or empty are mapped to a reporting indicator).
+#' In the case of aggregation, contradicting entries in private column for the same reporting indicator will throw an error.
 #' Unit is a name of the unit without ()
 #'   Example:
 #' "magpie";"agmip";"item";"unit";"weight";"factor"
@@ -30,7 +32,7 @@
 #' @param append Logical which decides whether data should be added to an existing file or an existing file should be overwritten
 #' @param missing_log name of logfile to record variables which are present in the mapping but missing in the mif file. By default, no logfile is produced
 #' @param ... arguments passed to write.report and write.report2
-#' @author Christoph Bertram, Lavinia Baumstark, Anastasis Giannousakis, Florian Humpenoeder
+#' @author Christoph Bertram, Lavinia Baumstark, Anastasis Giannousakis, Florian Humpenoeder, Falk Benke
 #' @seealso \code{\link{write.report}}
 #' @examples
 #'
@@ -77,10 +79,15 @@ write.reportProject <- function(mif, mapping,
   # set missing values in factor column to 1
   map$factor[which(map$factor=="")]<-1
 
-
+  # if non existent, add private column
+  if(!"private" %in% names(map)) {
+    map$private<-0
+  }
+  # set missing values in private column to 0
+  map$private[which(map$private=="")]<-0
 
   # reorder mapping
-  indicatorcols=which(!names(map) %in% c("factor","weight","unit"))
+  indicatorcols=which(!names(map) %in% c("factor","weight","unit","private"))
   if(!1 %in% indicatorcols) {stop("first column has to be reporting mif output indicator name")}
   # merge multiple indicator columns
   map2 <- data.frame(map[,1],apply(map[,setdiff(indicatorcols,1),drop=FALSE],MARGIN=1,paste,collapse="."),map[,-indicatorcols],stringsAsFactors = FALSE)
@@ -89,7 +96,6 @@ write.reportProject <- function(mif, mapping,
 
   map<-map2
   remove(map2)
-
 
   missingc <- c()
   # select variables and change names of reported variables
@@ -101,7 +107,7 @@ write.reportProject <- function(mif, mapping,
 
     for (n in names(data)){   # n: scenarios
       for (m in names(data[[n]])){  # m: models
-        ind <- which(map[,names(map)[1]]  %in% intersect(map[,names(map)[1]],getNames(data[[n]][[m]])))
+        ind <- which(map[,names(map)[1]] %in% intersect(map[,names(map)[1]],getNames(data[[n]][[m]])) & map$private == "0")
 
         tmp<- setNames(mbind(
           lapply(
@@ -133,31 +139,36 @@ write.reportProject <- function(mif, mapping,
     for (n in names(data)){   # n: scenarios
       for (m in names(data[[n]])){  # m: models
         if(length(fulldim(data[[n]][[m]])[[1]])>3){stop("data has more than 3 dimensions")}
-        tmp<-new.magpie(cells_and_regions = getCells(data[[n]][[m]]), years = getYears(data[[n]][[m]]), names = unique(map[,2]))
+        tmp<-new.magpie(cells_and_regions = getCells(data[[n]][[m]]), years = getYears(data[[n]][[m]]), names = unique(map[map$private=="0",2]))
 
         for (ind_x in unique(map[,2])){
           mapindex=which(map[,2]==ind_x)
           weight_x=map$weight[mapindex]
           factor_x=setNames(as.magpie(as.numeric(map$factor[mapindex])),map[mapindex,1])
+          private_x=map$private[mapindex]
           original_x=map[mapindex,1]
 
-          if(all(original_x %in% getNames(data[[n]][[m]]))) {
-            if (any(weight_x=="")){
-              #wenn Gewicht "" dann error
-              stop(paste0("empty weight for indicator "),ind_x)
-            } else if (all(weight_x != "NULL")){
-              #wenn Gewicht vorhanden dann average
-              # average: by(data = b,INDICES = b[,2],FUN = function(x){sum(x$breaks*x$test)/sum(x$test)})
-              tmp[,,ind_x]<-  dimSums(data[[n]][[m]][,,original_x]*factor_x*setNames(data[[n]][[m]][,,weight_x],original_x),dim=3.1)/dimSums(setNames(data[[n]][[m]][,,weight_x],original_x),dim=3.1)
-            } else if (all(weight_x=="NULL")){
-              #wenn gewicht NULL dann summation
-              tmp[,,ind_x] <- dimSums(data[[n]][[m]][,,original_x]*factor_x,dim=3.1)
-            } else {
-              stop(paste0("mixture of weights between NULL and parameters for indicator "),ind_x)
-              #wenn Gewicht mischung aus NULL und "" dann error
+          if(any(private_x == "0") & any(private_x == "1")){
+            stop(paste0("mixture of private between 0 and 1 for indicator "),ind_x)
+          } else if(all(private_x == "0")){
+            if(all(original_x %in% getNames(data[[n]][[m]]))) {
+              if (any(weight_x=="")){
+                #wenn Gewicht "" dann error
+                stop(paste0("empty weight for indicator "),ind_x)
+              } else if (all(weight_x != "NULL")){
+                #wenn Gewicht vorhanden dann average
+                # average: by(data = b,INDICES = b[,2],FUN = function(x){sum(x$breaks*x$test)/sum(x$test)})
+                tmp[,,ind_x]<-  dimSums(data[[n]][[m]][,,original_x]*factor_x*setNames(data[[n]][[m]][,,weight_x],original_x),dim=3.1)/dimSums(setNames(data[[n]][[m]][,,weight_x],original_x),dim=3.1)
+              } else if (all(weight_x=="NULL")){
+                #wenn gewicht NULL dann summation
+                tmp[,,ind_x] <- dimSums(data[[n]][[m]][,,original_x]*factor_x,dim=3.1)
+              } else {
+                stop(paste0("mixture of weights between NULL and parameters for indicator "),ind_x)
+                #wenn Gewicht mischung aus NULL und "" dann error
+              }
+            } else if (is.null(missing_log)){
+              warning(paste0("Indicator ", original_x[which(!original_x%in%getNames(data[[n]][[m]]))]," missing in data but exists in mapping"))
             }
-          } else if (is.null(missing_log)){
-            warning(paste0("Indicator ", original_x[which(!original_x%in%getNames(data[[n]][[m]]))]," missing in data but exists in mapping"))
           }
         }
 
