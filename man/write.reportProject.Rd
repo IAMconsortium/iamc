@@ -23,13 +23,16 @@ a report.mif}
 naming. The format of the mapping should be: 1st column the standard naming in PIK mif format.
 X further columns that contain the indicator names in the reporting format. Can also contain
 several indicator columns (e.g Variable and Item).
-Optional columns with reserved names are unit, weight, and factor.
-Factor is a number that the results will be multplied with (e.g. to transform CO2 into C).
+Optional columns with reserved names are unit, weight, factor, and spatial.
+Factor is a number that the results will be multiplied with (e.g. to transform CO2 into C).
 Weight is needed if several mif indicators shall be aggregated to one reporting indicator.
 You always need a weight column if you have multiple mif to one reporting mappings. If you have
 a weight column, you have to have values in it for all indicators. If NULL, the results are
 added up; if you provide an indicator name (of a mif indicator), this indicator will be used for
 the weighting of a weighted mean.
+Spatial should be set to "glo" for mif indicators that shall only be reported globally and "reg" for only reporting locally.
+The default is "reg+glo", which implies reporting on global and local level.
+In the case of aggregation, contradicting entries in spatial column for the same reporting indicator will throw an error.
 Unit is a name of the unit without ()
   Example:
 "magpie";"agmip";"item";"unit";"weight";"factor"
@@ -49,7 +52,7 @@ Unit is a name of the unit without ()
 }
 \description{
 Reads in a reporting.mif or uses a magpie object based on a read-in reporting.mif,
-substitutes names of variables according to the mappping, mutliplies reported
+substitutes names of variables according to the mapping, multiplies reported
 values by an optional factor in a column named "factor" of the mapping, and saves
 the output in a new *.mif
 }
@@ -64,5 +67,5 @@ write.reportProject("REMIND_generic_test.mif","Mapping_generic_ADVANCE.csv")
 \code{\link{write.report}}
 }
 \author{
-Christoph Bertram, Lavinia Baumstark, Anastasis Giannousakis, Florian Humpenoeder
+Christoph Bertram, Lavinia Baumstark, Anastasis Giannousakis, Florian Humpenoeder, Falk Benke
 }

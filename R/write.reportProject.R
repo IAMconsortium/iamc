@@ -1,7 +1,7 @@
 #' Write file in specific project format
 #'
 #' Reads in a reporting.mif or uses a magpie object based on a read-in reporting.mif,
-#' substitutes names of variables according to the mappping, mutliplies reported
+#' substitutes names of variables according to the mapping, multiplies reported
 #' values by an optional factor in a column named "factor" of the mapping, and saves
 #' the output in a new *.mif
 #'
@@ -12,13 +12,16 @@
 #' naming. The format of the mapping should be: 1st column the standard naming in PIK mif format.
 #' X further columns that contain the indicator names in the reporting format. Can also contain
 #' several indicator columns (e.g Variable and Item).
-#' Optional columns with reserved names are unit, weight, and factor.
-#' Factor is a number that the results will be multplied with (e.g. to transform CO2 into C).
+#' Optional columns with reserved names are unit, weight, factor, and spatial.
+#' Factor is a number that the results will be multiplied with (e.g. to transform CO2 into C).
 #' Weight is needed if several mif indicators shall be aggregated to one reporting indicator.
 #' You always need a weight column if you have multiple mif to one reporting mappings. If you have
 #' a weight column, you have to have values in it for all indicators. If NULL, the results are
 #' added up; if you provide an indicator name (of a mif indicator), this indicator will be used for
 #' the weighting of a weighted mean.
+#' Spatial should be set to "glo" for mif indicators that shall only be reported globally and "reg" for only reporting locally.
+#' The default is "reg+glo", which implies reporting on global and local level.
+#' In the case of aggregation, contradicting entries in spatial column for the same reporting indicator will throw an error.
 #' Unit is a name of the unit without ()
 #'   Example:
 #' "magpie";"agmip";"item";"unit";"weight";"factor"
@@ -30,7 +33,7 @@
 #' @param append Logical which decides whether data should be added to an existing file or an existing file should be overwritten
 #' @param missing_log name of logfile to record variables which are present in the mapping but missing in the mif file. By default, no logfile is produced
 #' @param ... arguments passed to write.report and write.report2
-#' @author Christoph Bertram, Lavinia Baumstark, Anastasis Giannousakis, Florian Humpenoeder
+#' @author Christoph Bertram, Lavinia Baumstark, Anastasis Giannousakis, Florian Humpenoeder, Falk Benke
 #' @seealso \code{\link{write.report}}
 #' @examples
 #'
@@ -40,7 +43,7 @@
 #'
 #' @importFrom utils read.csv2 write.csv write.table
 #' @importFrom magclass dimSums fulldim getCells getNames<- getSets getSets<- getYears
-#' is.magpie mbind new.magpie read.report setNames write.report2 getNames
+#' is.magpie mbind new.magpie read.report setNames write.report2 getNames getRegions
 #' @importFrom reshape2 melt
 #' @importFrom readxl read_excel
 #' @importFrom writexl write_xlsx
@@ -77,10 +80,26 @@ write.reportProject <- function(mif, mapping,
   # set missing values in factor column to 1
   map$factor[which(map$factor=="")]<-1
 
+  # if non existent, add spatial column
+  if(!"spatial" %in% names(map)) {
+    map$spatial<-"reg+glo"
+  }
+  # set missing values in spatial column to "reg+glo"
+  map$spatial[which(map$spatial=="")]<-"reg+glo"
 
+  # do not allow contradicting values in spatial column for the same reporting indicator
+  if (any(stats::aggregate(map$spatial, by = list(Variable = map$Variable), function(x) {
+    length(unique(x))
+  })$x > 1)) {
+    stop("error in mapping. don't use contradicting spatial values for the same reporting indicator")
+  }
+
+  if(length(setdiff(unique(map$spatial), c("reg", "glo", "reg+glo")))>0){
+    stop("error in mapping. spatial values must be eiter \"reg\", \"glo\", or \"reg+glo\"")
+  }
 
   # reorder mapping
-  indicatorcols=which(!names(map) %in% c("factor","weight","unit"))
+  indicatorcols=which(!names(map) %in% c("factor","weight","unit", "spatial"))
   if(!1 %in% indicatorcols) {stop("first column has to be reporting mif output indicator name")}
   # merge multiple indicator columns
   map2 <- data.frame(map[,1],apply(map[,setdiff(indicatorcols,1),drop=FALSE],MARGIN=1,paste,collapse="."),map[,-indicatorcols],stringsAsFactors = FALSE)
@@ -103,13 +122,22 @@ write.reportProject <- function(mif, mapping,
       for (m in names(data[[n]])){  # m: models
         ind <- which(map[,names(map)[1]]  %in% intersect(map[,names(map)[1]],getNames(data[[n]][[m]])))
 
-        tmp<- setNames(mbind(
+        tmp <- setNames(mbind(
           lapply(
-            map[ind,names(map)[1]],
-            function(x) {
-              as.numeric(map[which(map[,names(map)[1],drop=FALSE]==x),"factor"])*(data[[n]][[m]][,,x])
-            }
-          )), map[ind,indicatorcols[-1]])
+            map[ind, names(map)[1]],
+               function(x) {
+                 r <- as.numeric(map[which(map[,names(map)[1],drop=F] == x), "factor"]) * data[[n]][[m]][,,x]
+                 spatial_x <- unique(map[which(map[,names(map)[1],drop=F] == x), "spatial"])
+                 if (spatial_x == "reg") {
+                   r["GLO",,] <- NA
+                 } else if (spatial_x == "glo") {
+                   r[getRegions(r["GLO",,invert=T]),,] <- NA
+                 }
+                 return(r)
+               }
+            )
+          ), map[ind, indicatorcols[-1]]
+        )
 
         # correct sets for multicolumn objects
         getSets(tmp)<-c(getSets(tmp)[1:3],strsplit(names(map)[2],"[.]")[[1]][-1])
@@ -124,9 +152,7 @@ write.reportProject <- function(mif, mapping,
           missingc <- c(missingc,tmp)
         }
       }
-
     }
-
   } else {
   # with aggregation
 
@@ -140,6 +166,14 @@ write.reportProject <- function(mif, mapping,
           weight_x=map$weight[mapindex]
           factor_x=setNames(as.magpie(as.numeric(map$factor[mapindex])),map[mapindex,1])
           original_x=map[mapindex,1]
+          spatial_x=unique(map$spatial[mapindex])
+          if(spatial_x == "reg"){
+            regions<-getRegions(data[[n]][[m]]["GLO",,invert=T])
+          }else if(spatial_x == "glo"){
+            regions<-c("GLO")
+          }else{
+            regions<-getRegions(data[[n]][[m]])
+          }
 
           if(all(original_x %in% getNames(data[[n]][[m]]))) {
             if (any(weight_x=="")){
@@ -148,10 +182,10 @@ write.reportProject <- function(mif, mapping,
             } else if (all(weight_x != "NULL")){
               #wenn Gewicht vorhanden dann average
               # average: by(data = b,INDICES = b[,2],FUN = function(x){sum(x$breaks*x$test)/sum(x$test)})
-              tmp[,,ind_x]<-  dimSums(data[[n]][[m]][,,original_x]*factor_x*setNames(data[[n]][[m]][,,weight_x],original_x),dim=3.1)/dimSums(setNames(data[[n]][[m]][,,weight_x],original_x),dim=3.1)
+              tmp[regions,,ind_x]<-  dimSums(data[[n]][[m]][regions,,original_x]*factor_x*setNames(data[[n]][[m]][regions,,weight_x],original_x),dim=3.1)/dimSums(setNames(data[[n]][[m]][regions,,weight_x],original_x),dim=3.1)
             } else if (all(weight_x=="NULL")){
               #wenn gewicht NULL dann summation
-              tmp[,,ind_x] <- dimSums(data[[n]][[m]][,,original_x]*factor_x,dim=3.1)
+              tmp[regions,,ind_x] <- dimSums(data[[n]][[m]][regions,,original_x]*factor_x,dim=3.1)
             } else {
               stop(paste0("mixture of weights between NULL and parameters for indicator "),ind_x)
               #wenn Gewicht mischung aus NULL und "" dann error
