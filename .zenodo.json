@@ -1,0 +1,16 @@
+{
+  "title": "iamc: IAMC Tools",
+  "version": "0.28.0",
+  "description": "<p>A collection of R tools provided by the Integrated Assessment Modeling Consortium (IAMC) for data analysis and diagnostics. <\/p>",
+  "creators": [
+    {
+      "name": "Dietrich, Jan Philipp"
+    },
+    {
+      "name": "Baumstark, Lavinia"
+    },
+    {
+      "name": "Auer, Cornelia"
+    }
+  ]
+}
