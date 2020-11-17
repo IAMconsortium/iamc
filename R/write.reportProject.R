@@ -70,7 +70,7 @@ write.reportProject <- function(mif, mapping,
   }
   # read in mapping of the names of variables for the project, handle NAs
   map <- read.csv2(mapping,colClasses="character")
-  map <- sapply(X = map,FUN = function(x) gsub("N/A","NA",x,fixed = T))
+  map <- sapply(X = map,FUN = function(x) gsub("N/A","NA",x,fixed = T,useBytes = TRUE))
   map <- as.data.frame(map,stringsAsFactors = FALSE)
 
   # if non existent, add factor column
