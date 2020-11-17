@@ -1,6 +1,6 @@
 # IAMC Tools
 
-R package **iamc**, version **0.28.1**
+R package **iamc**, version **0.28.2**
 
   
 
@@ -47,7 +47,7 @@ In case of questions / problems please contact Jan Philipp Dietrich <dietrich@pi
 To cite package **iamc** in publications use:
 
 Dietrich J, Baumstark L, Auer C (2020). _iamc: IAMC Tools_. R package
-version 0.28.1.
+version 0.28.2.
 
 A BibTeX entry for LaTeX users is
 
@@ -56,7 +56,7 @@ A BibTeX entry for LaTeX users is
   title = {iamc: IAMC Tools},
   author = {Jan Philipp Dietrich and Lavinia Baumstark and Cornelia Auer},
   year = {2020},
-  note = {R package version 0.28.1},
+  note = {R package version 0.28.2},
 }
 ```
 
