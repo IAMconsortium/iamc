@@ -88,7 +88,7 @@ write.reportProject <- function(mif, mapping,
   map$spatial[which(map$spatial=="")]<-"reg+glo"
 
   # do not allow contradicting values in spatial column for the same reporting indicator
-  if (any(stats::aggregate(map$spatial, by = list(Variable = map$Variable), function(x) {
+  if (any(stats::aggregate(map$spatial, by = list(Variable = if (format %in% c("default","IAMC")) map$Variable else if (format=="AgMIP") map$item), function(x) {
     length(unique(x))
   })$x > 1)) {
     stop("error in mapping. don't use contradicting spatial values for the same reporting indicator")
@@ -128,10 +128,11 @@ write.reportProject <- function(mif, mapping,
                function(x) {
                  r <- as.numeric(map[which(map[,names(map)[1],drop=F] == x), "factor"]) * data[[n]][[m]][,,x]
                  spatial_x <- unique(map[which(map[,names(map)[1],drop=F] == x), "spatial"])
+                 GLO <- intersect(c("GLO","WLD","World","WORLD"),getRegions(r))[1]
                  if (spatial_x == "reg") {
-                   r["GLO",,] <- NA
+                   r[GLO,,] <- NA
                  } else if (spatial_x == "glo") {
-                   r[getRegions(r["GLO",,invert=T]),,] <- NA
+                   r[getRegions(r[GLO,,invert=T]),,] <- NA
                  }
                  return(r)
                }
@@ -167,10 +168,11 @@ write.reportProject <- function(mif, mapping,
           factor_x=setNames(as.magpie(as.numeric(map$factor[mapindex])),map[mapindex,1])
           original_x=map[mapindex,1]
           spatial_x=unique(map$spatial[mapindex])
+          GLO <- intersect(c("GLO","WLD","World","WORLD"),getRegions(data[[n]][[m]]))[1]
           if(spatial_x == "reg"){
-            regions<-getRegions(data[[n]][[m]]["GLO",,invert=T])
+            regions<-getRegions(data[[n]][[m]][GLO,,invert=T])
           }else if(spatial_x == "glo"){
-            regions<-c("GLO")
+            regions<-c(GLO)
           }else{
             regions<-getRegions(data[[n]][[m]])
           }
