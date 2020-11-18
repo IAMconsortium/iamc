@@ -109,6 +109,13 @@ write.reportProject <- function(mif, mapping,
   map<-map2
   remove(map2)
 
+  #check for duplicate rows
+  if (length(rownames(map[duplicated(map),])) > 0) {
+    warning(paste("Duplicate rows found in mapping in line(s)",rownames(map[duplicated(map),])))
+    map <- map[!duplicated(map),]
+    warning("Duplicate rows removed from mapping, otherwise unwrap would stop with an error.")
+  }
+
 
   missingc <- c()
   # select variables and change names of reported variables
