@@ -1,11 +1,15 @@
 Package: iamc
 Type: Package
 Title: IAMC Tools
-Version: 0.28.2
-Date: 2020-11-17
+Version: 0.28.3
+Date: 2020-11-18
 Authors@R: c(person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de", role = c("aut","cre")),
-             person("Lavinia", "Baumstark", email = "lavinia@pik-potsdam.de", role = "aut"),
-             person("Cornelia", "Auer", email = "cornelia.auer@pik-potsdam.de", role = "aut"))
+             person("Cornelia", "Auer", role = "aut"),
+             person("Anastasis", "Giannousakis", role = "aut"),
+             person("Christoph", "Bertram", role = "aut"),
+             person("Falk", "Benke", role = "aut"),
+             person("Florian", "Humpenoeder", role = "aut"),
+             person("Lavinia", "Baumstark", role = "aut"))
 Description: A collection of R tools provided by the Integrated Assessment Modeling Consortium (IAMC) for data analysis and diagnostics. 
 License: MIT + file LICENSE
 Depends:
