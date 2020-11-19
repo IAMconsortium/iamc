@@ -3,7 +3,7 @@ Type: Package
 Title: IAMC Tools
 Version: 0.28.3
 Date: 2020-11-18
-Authors@R: c(person("Jan Philipp", "Dietrich", email = "@pik-potsdam.de", role = c("aut","cre")),
+Authors@R: c(person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de", role = c("aut","cre")),
              person("Cornelia", "Auer", role = "aut"),
              person("Anastasis", "Giannousakis", role = "aut"),
              person("Christoph", "Bertram", role = "aut"),
