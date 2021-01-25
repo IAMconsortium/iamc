@@ -87,13 +87,6 @@ write.reportProject <- function(mif, mapping,
   # set missing values in spatial column to "reg+glo"
   map$spatial[which(map$spatial=="")]<-"reg+glo"
 
-  # do not allow contradicting values in spatial column for the same reporting indicator
-  if (any(stats::aggregate(map$spatial, by = list(Variable = if (format %in% c("default","IAMC")) map$Variable else if (format=="AgMIP") map$item), function(x) {
-    length(unique(x))
-  })$x > 1)) {
-    stop("error in mapping. don't use contradicting spatial values for the same reporting indicator")
-  }
-
   if(length(setdiff(unique(map$spatial), c("reg", "glo", "reg+glo")))>0){
     stop("error in mapping. spatial values must be eiter \"reg\", \"glo\", or \"reg+glo\"")
   }
