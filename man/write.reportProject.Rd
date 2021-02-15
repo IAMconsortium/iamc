@@ -64,8 +64,8 @@ write.reportProject("REMIND_generic_test.mif","Mapping_generic_ADVANCE.csv")
 
 }
 \seealso{
-\code{\link{write.report}}
+\code{\link{write.report}}, \code{\link{RenameAndAggregate}}
 }
 \author{
-Christoph Bertram, Lavinia Baumstark, Anastasis Giannousakis, Florian Humpenoeder, Falk Benke
+Christoph Bertram, Lavinia Baumstark, Anastasis Giannousakis, Florian Humpenoeder, Falk Benke, Benjamin Leon Bodirsky
 }
