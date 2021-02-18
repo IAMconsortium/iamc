@@ -1,6 +1,6 @@
 {
   "title": "iamc: IAMC Tools",
-  "version": "0.28.4",
+  "version": "0.29.1",
   "description": "<p>A collection of R tools provided by the Integrated Assessment Modeling Consortium (IAMC) for data analysis and diagnostics. <\/p>",
   "creators": [
     {
