@@ -172,7 +172,7 @@ RenameAndAggregate <- function(data, mapping, missing_log=NULL) {
           "Following variables were not found in the generic data and were excluded: \"",
           paste(unique(missingc), collapse = "\", \""),"\""))
     }else{
-      write(c(sprintf("#--- Variables missing in mif %s ---#"), missingc, "\n"), missing_log, append=TRUE)
+      write(c("#--- Variables missing ---#", missingc, "\n"), missing_log, append=TRUE)
     }
   }
 

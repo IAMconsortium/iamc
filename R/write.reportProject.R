@@ -67,6 +67,11 @@ write.reportProject <- function(mif, mapping,
     }
    } else {
     stop("please provide either a path to a mif-file, a read in mif-file (in list-structure or as a magpie object)")
+   }
+
+  ### update logfile with current dataset name
+  if(is.vector(mif)){
+    write(c(sprintf("#--- Writing report for %s ---#", mif), "\n"), missing_log, append=TRUE)
   }
 
   ### Here the actual magic takes place
