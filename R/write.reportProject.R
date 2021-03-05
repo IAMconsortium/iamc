@@ -70,7 +70,7 @@ write.reportProject <- function(mif, mapping,
    }
 
   ### update logfile with current dataset name
-  if(is.vector(mif)){
+  if(is.vector(mif) & !is.null(missing_log)){
     write(c(sprintf("#--- Writing report for %s ---#", mif), "\n"), missing_log, append=TRUE)
   }
 
@@ -159,5 +159,4 @@ write.reportProject <- function(mif, mapping,
     return(new_data)
   }
 }
-
 
