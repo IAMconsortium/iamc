@@ -1,8 +1,8 @@
 # IAMC Tools
 
-R package **iamc**, version **0.29.4**
+R package **iamc**, version **0.29.5**
 
-[![CRAN status](https://www.r-pkg.org/badges/version/iamc)](https://cran.r-project.org/package=iamc)    
+[![CRAN status](https://www.r-pkg.org/badges/version/iamc)](https://cran.r-project.org/package=iamc)    [![r-universe](https://pik-piam.r-universe.dev/badges/iamc)](https://pik-piam.r-universe.dev/ui#builds)
 
 ## Purpose and Functionality
 
@@ -46,8 +46,7 @@ In case of questions / problems please contact Jan Philipp Dietrich <dietrich@pi
 
 To cite package **iamc** in publications use:
 
-Dietrich J, Auer C, Giannousakis A, Bertram C, Benke F, Humpenoeder F, Baumstark L
-(2021). _iamc: IAMC Tools_. R package version 0.29.4.
+Dietrich J, Auer C, Giannousakis A, Bertram C, Benke F, Humpenoeder F, Baumstark L (2022). _iamc: IAMC Tools_. R package version 0.29.5.
 
 A BibTeX entry for LaTeX users is
 
@@ -55,8 +54,7 @@ A BibTeX entry for LaTeX users is
 @Manual{,
   title = {iamc: IAMC Tools},
   author = {Jan Philipp Dietrich and Cornelia Auer and Anastasis Giannousakis and Christoph Bertram and Falk Benke and Florian Humpenoeder and Lavinia Baumstark},
-  year = {2021},
-  note = {R package version 0.29.4},
+  year = {2022},
+  note = {R package version 0.29.5},
 }
 ```
-

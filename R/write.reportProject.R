@@ -32,7 +32,7 @@
 #' @param format available reporting formats: "default", "IAMC" and "AgMIP". "default" and "IAMC" are very similar (wide format for year) and differ only in the use of semi-colon (default) and comma (IAMC) as seperator. "AgMIP" is in long format.
 #' @param append Logical which decides whether data should be added to an existing file or an existing file should be overwritten
 #' @param missing_log name of logfile to record variables which are present in the mapping but missing in the mif file. By default, no logfile is produced
-#' @param ... arguments passed to write.report and write.report2
+#' @param ... arguments passed to write.report
 #' @author Christoph Bertram, Lavinia Baumstark, Anastasis Giannousakis, Florian Humpenoeder, Falk Benke, Benjamin Leon Bodirsky
 #' @seealso \code{\link{write.report}}, \code{\link{RenameAndAggregate}}
 #' @examples
@@ -43,7 +43,7 @@
 #'
 #' @importFrom utils read.csv2 write.csv write.table
 #' @importFrom magclass dimSums fulldim getCells getNames<- getSets getSets<- getYears
-#' is.magpie mbind new.magpie read.report setNames write.report2 getNames getRegions
+#' is.magpie mbind new.magpie read.report setNames write.report getNames getRegions
 #' @importFrom reshape2 melt
 #' @importFrom readxl read_excel
 #' @importFrom writexl write_xlsx
@@ -87,7 +87,7 @@ write.reportProject <- function(mif, mapping,
         if (grepl("~",file)){
           stop("the sign '~' is not always supported by function write.xlsx. Please change file path")
         }
-        a <- write.report2(new_data,file=NULL,...)
+        a <- write.report(new_data,file=NULL,...)
         a <- do.call(rbind,do.call(rbind,a))
         if(append) {
           existing.data <- read_excel(file, sheet = "DATA")
@@ -98,13 +98,13 @@ write.reportProject <- function(mif, mapping,
         }
 
       } else
-        write.report2(new_data,file=file,append=append,...)
+        write.report(new_data,file=file,append=append,...)
     } else if (format == "IAMC") {
-      a <- write.report2(new_data,file=NULL,...)
+      a <- write.report(new_data,file=NULL,...)
       a <- do.call(rbind,do.call(rbind,a))
       write.table(a,file,quote=FALSE,sep=",",row.names=FALSE,col.names=!append,append=append,eol="\n")
     } else if (format == "AgMIP") {
-      a <- write.report2(new_data,file=NULL,extracols = "Item",...)
+      a <- write.report(new_data,file=NULL,extracols = "Item",...)
       a <- do.call(rbind,do.call(rbind,a))
       b<-melt(a,id.vars = c("Model","Scenario","Region","Item","Variable","Unit"),variable.name = "Year",value.name="Value")
       b<-b[c("Model","Scenario","Region","Item","Variable","Year","Unit","Value")]
@@ -138,13 +138,13 @@ write.reportProject <- function(mif, mapping,
           last <- length(file_name)
           #write report
           if(format == "default") {
-            write.report2(tmp,file=paste0(file_name[1:last-1],"_part",f,".",file_name[last]),...)
+            write.report(tmp,file=paste0(file_name[1:last-1],"_part",f,".",file_name[last]),...)
           } else if (format == "IAMC") {
-            a <- write.report2(tmp,file=NULL,...)
+            a <- write.report(tmp,file=NULL,...)
             a <- do.call(rbind,do.call(rbind,a))
             write.csv(a,file=file,row.names = FALSE,quote = FALSE)
           } else if (format == "AgMIP") {
-            a <- write.report2(tmp,file=NULL,extracols = "Item",...)
+            a <- write.report(tmp,file=NULL,extracols = "Item",...)
             a <- do.call(rbind,do.call(rbind,a))
             b<-melt(a,id.vars = c("Model","Scenario","Region","Item","Variable","Unit"),variable.name = "Year",value.name="Value")
             b<-b[c("Model","Scenario","Region","Item","Variable","Year","Unit","Value")]

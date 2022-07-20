@@ -37,8 +37,8 @@
 #' }
 #'
 #' @importFrom utils read.csv2
-#' @importFrom magclass dimSums fulldim getCells getNames<- getSets getSets<- getYears
-#' is.magpie mbind new.magpie read.report setNames write.report2 getNames getRegions
+#' @importFrom magclass dimSums ndim getCells getNames<- getSets getSets<- getYears
+#' is.magpie mbind new.magpie read.report setNames getNames getRegions
 #' @export
 
 
@@ -111,7 +111,7 @@ RenameAndAggregate <- function(data, mapping, missing_log=NULL) {
 
     for (n in names(data)){   # n: scenarios
       for (m in names(data[[n]])){  # m: models
-        if(length(fulldim(data[[n]][[m]])[[1]])>3){stop("data has more than 3 dimensions")}
+        if (ndim(data[[n]][[m]], dim = 3) > 1) {stop("data has more than 1 data dimensions")}
         tmp<-new.magpie(cells_and_regions = getCells(data[[n]][[m]]), years = getYears(data[[n]][[m]]), names = unique(map[,2]))
 
         for (ind_x in unique(map[,2])){
@@ -173,7 +173,7 @@ RenameAndAggregate <- function(data, mapping, missing_log=NULL) {
           paste(unique(missingc), collapse = "\", \""),"\""))
     }else{
       if (!is.null(missing_log)){
-        write(c("#--- Variables missing ---#", missingc, "\n"), missing_log, append=TRUE)
+        write(c("#--- Variables missing in the mif file but present in the mapping ---#", missingc, "\n"), missing_log, append=TRUE)
       }
     }
   }

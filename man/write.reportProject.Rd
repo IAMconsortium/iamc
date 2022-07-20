@@ -48,7 +48,7 @@ Unit is a name of the unit without ()
 
 \item{missing_log}{name of logfile to record variables which are present in the mapping but missing in the mif file. By default, no logfile is produced}
 
-\item{...}{arguments passed to write.report and write.report2}
+\item{...}{arguments passed to write.report}
 }
 \description{
 Reads in a reporting.mif or uses a magpie object based on a read-in reporting.mif,

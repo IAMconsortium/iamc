@@ -2,3 +2,9 @@
 ^\.Rproj\.user$
 ^\.buildlibrary$
 ^.*\.zenodo.json$
+^\.pre-commit-config\.yaml$
+^workflow$
+^.lintr$
+^tests/.lintr$
+^vignettes/.lintr$
+^codecov\.yml$
