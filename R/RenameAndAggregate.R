@@ -173,7 +173,8 @@ RenameAndAggregate <- function(data, mapping, missing_log=NULL) {
           paste(unique(missingc), collapse = "\", \""),"\""))
     }else{
       if (!is.null(missing_log)){
-        write(c("#--- Variables missing in the mif file but present in the mapping ---#", missingc, "\n"), missing_log, append=TRUE)
+        write(c("#--- Variables missing in the mif file but present in the mapping ---#", unique(missingc), "\n"),
+              missing_log, append = TRUE)
       }
     }
   }
