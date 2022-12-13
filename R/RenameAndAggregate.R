@@ -170,10 +170,11 @@ RenameAndAggregate <- function(data, mapping, missing_log=NULL) {
       warning(
         paste0(
           "Following variables were not found in the generic data and were excluded: \"",
-          paste(unique(missingc), collapse = "\", \""),"\""))
+          paste(sort(unique(missingc)), collapse = "\", \""),"\""))
     }else{
       if (!is.null(missing_log)){
-        write(c("#--- Variables missing in the mif file but present in the mapping ---#", unique(missingc), "\n"),
+        write(c("#--- Variables missing in the mif file but present in the mapping ---#",
+                sort(unique(missingc)), "\n"),
               missing_log, append = TRUE)
       }
     }
