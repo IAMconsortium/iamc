@@ -8,3 +8,5 @@
 ^tests/.lintr$
 ^vignettes/.lintr$
 ^codecov\.yml$
+^\.github$
+^Makefile$
