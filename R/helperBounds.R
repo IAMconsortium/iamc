@@ -1,5 +1,7 @@
 helperBounds <- function(x, cfg, type) {
-  x$ref <- cfg[[type]][x$variable]
+  for (i in levels(x$variable)) {
+    x[which(x$variable == i), "ref"] <- cfg[[type]][which(cfg$variable == i)]
+  }
   if(type=="min") {
     x$check <- (x$value>=x$ref)
   } else if(type=="max") {
