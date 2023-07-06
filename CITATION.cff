@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it using the metadata from this file.
+type: software
+title: 'iamc: IAMC Tools'
+version: 0.29.8
+date-released: '2023-07-06'
+abstract: A collection of R tools provided by the Integrated Assessment Modeling Consortium
+  (IAMC) for data analysis and diagnostics.
+authors:
+- family-names: Dietrich
+  given-names: Jan Philipp
+  email: dietrich@pik-potsdam.de
+- family-names: Auer
+  given-names: Cornelia
+- family-names: Giannousakis
+  given-names: Anastasis
+- family-names: Bertram
+  given-names: Christoph
+- family-names: Benke
+  given-names: Falk
+- family-names: Humpenoeder
+  given-names: Florian
+- family-names: Baumstark
+  given-names: Lavinia
+license: MIT
+
