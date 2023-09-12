@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: If you use this software, please cite it using the metadata from this file.
 type: software
 title: 'iamc: IAMC Tools'
-version: 0.29.8
-date-released: '2023-07-06'
+version: 0.29.9
+date-released: '2023-09-12'
 abstract: A collection of R tools provided by the Integrated Assessment Modeling Consortium
   (IAMC) for data analysis and diagnostics.
 authors:
