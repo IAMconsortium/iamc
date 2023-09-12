@@ -51,8 +51,9 @@
 
 write.reportProject <- function(mif, mapping,
                                 file=NULL, max_file_size=NULL,
-                                format="default", append=FALSE, missing_log=NULL, ...){
-  if(is.character(mif)){
+                                format="default", append=FALSE, missing_log=NULL, ...) {
+
+  if (is.character(mif)) {
     data <- read.report(mif,as.list=TRUE)
   } else if (is.list(mif)){
     data <- mif
@@ -75,10 +76,11 @@ write.reportProject <- function(mif, mapping,
   }
 
   ### Here the actual magic takes place
-  new_data = RenameAndAggregate(data=data,mapping=mapping,missing_log=missing_log)
+  new_data <- RenameAndAggregate(data = data, mapping = mapping, missing_log = missing_log)
 
   ### write the outputs
   if(!is.null(file)){
+
     # save project reporting
     if(!file.exists(file)) append <- FALSE
     if(format == "default") {
@@ -99,16 +101,33 @@ write.reportProject <- function(mif, mapping,
 
       } else
         write.report(new_data,file=file,append=append,...)
+
     } else if (format == "IAMC") {
+
       a <- write.report(new_data,file=NULL,...)
       a <- do.call(rbind,do.call(rbind,a))
       write.table(a,file,quote=FALSE,sep=",",row.names=FALSE,col.names=!append,append=append,eol="\n")
+
     } else if (format == "AgMIP") {
-      a <- write.report(new_data,file=NULL,extracols = "Item",...)
-      a <- do.call(rbind,do.call(rbind,a))
-      b<-melt(a,id.vars = c("Model","Scenario","Region","Item","Variable","Unit"),variable.name = "Year",value.name="Value")
-      b<-b[c("Model","Scenario","Region","Item","Variable","Year","Unit","Value")]
-      write.table(b,file,quote=FALSE,sep=",",row.names=FALSE,col.names=!append,append=append,eol="\n")
+
+      if (is.list(new_data)) {
+        a <- NULL
+        for (i in seq_along(new_data)) {
+          model    <- names(new_data[[i]])
+          scenario <- names(new_data)[i]
+          tmp <- write.report(new_data[[i]][[model]], file = NULL,
+                              model = model, scenario = scenario,
+                              extracols = "Item")
+          a <- rbind(a, tmp)
+        }
+      } else {
+        a <- write.report(new_data, file = NULL, extracols = "Item",...)
+      }
+      b <- reshape2::melt(a, id.vars = c("Model", "Scenario", "Region", "Item", "Variable", "Unit"),
+                variable.name = "Year", value.name = "Value")
+      b <- b[c("Model", "Scenario", "Region", "Item", "Variable", "Year", "Unit", "Value")]
+      write.table(b, file, quote = FALSE, sep = ",",
+                  row.names = FALSE, col.names = !append, append = append, eol = "\n")
     }
 
     if (!is.null(max_file_size)) {
@@ -143,14 +162,31 @@ write.reportProject <- function(mif, mapping,
             a <- write.report(tmp,file=NULL,...)
             a <- do.call(rbind,do.call(rbind,a))
             write.csv(a,file=file,row.names = FALSE,quote = FALSE)
+
           } else if (format == "AgMIP") {
-            a <- write.report(tmp,file=NULL,extracols = "Item",...)
-            a <- do.call(rbind,do.call(rbind,a))
-            b<-melt(a,id.vars = c("Model","Scenario","Region","Item","Variable","Unit"),variable.name = "Year",value.name="Value")
-            b<-b[c("Model","Scenario","Region","Item","Variable","Year","Unit","Value")]
-            write.csv(b,file=paste0(file_name[1:last-1],"_part",f,".",file_name[last]),row.names = FALSE,quote = FALSE)
+
+            if (is.list(tmp)) {
+              a <- NULL
+              for (i in seq_along(tmp)) {
+                model    <- names(tmp[[i]])
+                scenario <- names(tmp)[i]
+                b <- write.report(tmp[[i]][[model]], file = NULL,
+                                  model = model, scenario = scenario,
+                                  extracols = "Item")
+                a <- rbind(a, b)
+              }
+            } else {
+              a <- write.report(tmp, file = NULL, extracols = "Item",...)
+            }
+
+            a <- do.call(rbind, do.call(rbind, a))
+            b <- reshape2::melt(a, id.vars = c("Model", "Scenario", "Region", "Item", "Variable", "Unit"),
+                                variable.name = "Year", value.name = "Value")
+            b <- b[c("Model", "Scenario", "Region", "Item", "Variable", "Year", "Unit", "Value")]
+            write.csv(b, file = paste0(file_name[1:last-1], "_part", f, ".", file_name[last]),
+                      row.names = FALSE, quote = FALSE)
           }
-          #set counter for next loop
+          # set counter for next loop
           first_scen <- first_scen+scen_per_file
         }
       }

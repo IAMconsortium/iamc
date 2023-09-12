@@ -1,8 +1,8 @@
 Package: iamc
 Type: Package
 Title: IAMC Tools
-Version: 0.29.8
-Date: 2023-07-06
+Version: 0.29.9
+Date: 2023-09-12
 Authors@R: c(person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de", role = c("aut","cre")),
              person("Cornelia", "Auer", role = "aut"),
              person("Anastasis", "Giannousakis", role = "aut"),
